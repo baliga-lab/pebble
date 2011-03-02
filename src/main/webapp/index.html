@@ -1,0 +1,34 @@
+<div id="main" class="lift:surround?with=default;at=content">
+  <head_merge>
+    <title>Pebble - Welcome</title>
+  </head_merge>
+  <h2 class="alt">About</h2>
+  <p>
+    Pebble is a repository for accessing experiment measurement data through
+    an uniform interface. It consists of two parts:
+  </p>
+  <ul>
+    <li>A REST API to access the measurements in JSON format</li>
+    <li>A HTML based interface to allow viewing the data in the web browser</li>
+  </ul>
+  <p>
+    Pebble currently does not provide search services, it is expected to be used
+    in combination with a search service like Echidna.
+  </p>
+  <h2 class="alt">REST API Usage</h2>
+  <p>
+    URLs are of the form
+  </p>  
+  <code>/pebble/api/1/sbeams/&lt;project id&gt;/&lt;timestamp&gt;/&lt;actions-and-options&gt;</code>
+  <h2 class="alt">Web View Usage</h2>
+  <p>
+    URLs are of the form
+  </p>  
+  <code>/pebble/view/sbeams/&lt;project id&gt;/&lt;timestamp&gt;/&lt;actions-and-options&gt;</code>
+  <!--
+  <span class="lift:Dmv.tree"></span>
+  <div>
+    <ul id="tree" class="filetree"></ul>
+    <span class="lift:Dmv.howdy">Welcome to DMV at <b:time/></span>
+  </div> -->
+</div>
