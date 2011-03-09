@@ -2,7 +2,7 @@
   <head_merge>
     <title>Pebble - Welcome</title>
   </head_merge>
-  <h2 class="alt">About</h2>
+  <h3 class="alt">About</h3>
   <p>
     Pebble is a repository for accessing experiment measurement data through
     an uniform interface. It consists of two parts:
@@ -15,20 +15,44 @@
     Pebble currently does not provide search services, it is expected to be used
     in combination with a search service like Echidna.
   </p>
-  <h2 class="alt">REST API Usage</h2>
+  <h3 class="alt">API</h3>
+  <h4 class="alt">Retrieve JSON data</h4>
   <p>
-    URLs are of the form
-  </p>  
-  <code>/pebble/api/1/sbeams/&lt;project id&gt;/&lt;timestamp&gt;/&lt;actions-and-options&gt;</code>
-  <h2 class="alt">Web View Usage</h2>
+  <code>/pebble/api/1/&lt;parameter-specification&gt;</code><br>
+  </p>
+  <h4 class="alt">Data Matrix Viewer</h4>
   <p>
-    URLs are of the form
-  </p>  
-  <code>/pebble/view/sbeams/&lt;project id&gt;/&lt;timestamp&gt;/&lt;actions-and-options&gt;</code>
-  <!--
-  <span class="lift:Dmv.tree"></span>
-  <div>
-    <ul id="tree" class="filetree"></ul>
-    <span class="lift:Dmv.howdy">Welcome to DMV at <b:time/></span>
-  </div> -->
+  <code>/pebble/dmv/&lt;parameter-specification&gt;</code>
+  </p>
+  <h3 class="alt">Parameter Specification</h3>
+  <p>
+  <code>.../sbeams/&lt;project id&gt;/&lt;timestamp&gt;/[&lt;condition-id&gt;]</code><br>
+  <code>.../tiling/&lt;timestamp&gt;/[&lt;condition-id&gt;]</code><br>
+  <code>.../query?spec=&lt;output-spec&gt;</code> (HTTP GET)<br>
+  <code>.../query</code> (HTTP POST + Output specification as JSON)<br>
+  </p>
+  <h3 class="alt">JSON Query Format</h3>
+  <h4 class="alt">General Structure</h4>
+  <code><pre>
+  [
+    {
+      "datasource": "sbeams"|"tiling"|"pre-sbeams"|"gwap"
+      "params" : [type parameters]
+      "conditions": [ &lt;condition1&gt;, ...]
+    }
+  ]
+  </pre></code>
+  <h4 class="alt">SBEAMS parameters:</h4>
+  <code><pre>
+  {
+    "project_id": &lt;id&gt;
+    "timestamp": &lt;timestamp&gt;
+  }
+  </pre></code>
+  <h4 class="alt">Tiling parameters:</h4>
+  <code><pre>
+  {
+    "timestamp": &lt;timestamp&gt;
+  }
+  </pre></code>
 </div>

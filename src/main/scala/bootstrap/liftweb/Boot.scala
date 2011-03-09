@@ -56,8 +56,9 @@ class Boot {
   }
 */
   def addRestServices {
-    LiftRules.dispatch.append(GeneExpressionRestService)
+    //LiftRules.dispatch.append(GeneExpressionRestService)
     LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
+    LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
   }
 
   def boot {

@@ -3,13 +3,8 @@ body {
     font-size: 11pt;
 }
 
-table.data-table {
+code {
     font-size: 10pt;
-}
-
-table.data-table th {
-    background-color: #555555;
-    color: white;
 }
 
 .edit_error_class {
@@ -50,3 +45,33 @@ table.data-table th {
 	background-color: #eee;
 }
 
+/*
+ * Data table settings:
+ * We need alternating background colors, but blueprint's screen.css defines
+ * it on the td, we change it to be on the tr, so we can select/hover rows
+ */
+table.data_table {
+    font-size: 8pt;
+}
+
+table.data_table tr td {
+    background: none;
+}
+table.data_table th {
+    background-color: #555555;
+    color: white;
+}
+
+table.data_table tr:nth-child(even) {
+    background: #e5ecf9;
+}
+
+table.data_table tr:hover {
+    background-color: #24249b;
+    color: white;
+}
+
+table.data_table tr.selected {
+    background-color: #24249b;
+    color: white;
+}

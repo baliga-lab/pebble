@@ -1,7 +1,35 @@
 <div id="main" class="lift:surround?with=default;at=content">
   <head_merge>
     <title>Pebble - Data Matrix Viewer</title>
+    <script id="highcharts" src="/js/highcharts.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#chart1').hide();
+        $('.data_table tr').click(function() {
+          $(this).toggleClass('selected');
+        });
+        $('#show-graph').click(function() {
+          var selectedRows = $('tr.selected');
+          var rowParams = '';
+          for (var i = 0; i < selectedRows.length; i++) {
+            if (i > 0) rowParams += ',';
+            rowParams += selectedRows.parent().children().index(selectedRows[i]);
+          }
+          if (selectedRows.length > 0) {
+            var paramString = window.location.href.slice(window.location.href.indexOf('?') + 1)
+            $.get('/highcharts/sbeams?rows=' + rowParams + '&' + paramString,
+            function(data) {
+              var chart1 = new Highcharts.Chart(data);
+              $('#chart1').show();
+            });
+          }
+          return false;
+        });
+      });
+    </script>
   </head_merge>
   <h2 class="alt">Data Matrix Viewer</h2>
+  <a id="show-graph" href="#">Plot Lambdas</a>
+  <div id="chart1" style="width: 640px; height: 300px;"></div>
   <span class="lift:Dmv.table"></span>
 </div>
