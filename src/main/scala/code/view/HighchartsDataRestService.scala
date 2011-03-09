@@ -12,6 +12,7 @@ import org.systemsbiology.formats.common._
 import code.model._
 
 object HighchartsDataRestService extends RestHelper {
+  import RequestHelper._
 
   val logger = Logger(getClass)
 
@@ -29,19 +30,10 @@ object HighchartsDataRestService extends RestHelper {
 
   private def xTitles(measurement: GeneExpressionMeasurement): List[String] = measurement.conditions.toList
 
-  private def conditions: List[String] = {
-    val conditions = S.param("conditions")
-    if (conditions != Empty) {
-      val condstr = conditions.get
-      condstr.substring(1, condstr.length - 1).split(",").toList
-    } else Nil
-  }
+  private def rows = S.param("rows").get.split(",").map(_.trim).map(str => java.lang.Integer.parseInt(str)).toList
 
   def sbeamsData2HighchartsJson: JValue = {
-    val projectId = S.param("projectId").get
-    val timestamp = S.param("timestamp").get
-    val rows = S.param("rows").get.split(",").map(_.trim).map(str => java.lang.Integer.parseInt(str)).toList
-    val measurement = PebbleDatabase.sbeamsGeneExpressionsFor(projectId, timestamp, conditions)
+    val meas = measurement
 
     logger.warn("Table for rows = " + rows)
     ("chart" -> (("renderTo" -> "chart1") ~ ("defaultSeriesType" -> "line"))) ~

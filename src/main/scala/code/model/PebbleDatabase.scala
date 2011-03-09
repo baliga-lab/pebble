@@ -11,6 +11,9 @@ trait GeneExpressionDatabase {
   def geneExpressionsFor(query: String): GeneExpressionMeasurement
 }
 
+/**
+ * A class which can be used to combine measurements from various sources
+ */
 class MutableGeneExpressionMeasurement(val vngNames: Array[String],
                                        val conditions: Array[String])
 extends GeneExpressionMeasurement {
@@ -29,8 +32,8 @@ object PebbleDatabase extends GeneExpressionDatabase {
 
   def geneExpressionsFor(queryString: String): GeneExpressionMeasurement = {
     val queries = parseJsonQuery(queryString)
-    println("QUERIES: " + queries)
-    null
+    val query0 = queries(0)
+    sbeamsGeneExpressionsFor(query0.params("projectId"), query0.params("timestamp"), query0.conditions)
   }
 
   def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,

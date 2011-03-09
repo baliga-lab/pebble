@@ -16,17 +16,19 @@ import Helpers._
 import org.systemsbiology.formats.common._
 import org.systemsbiology.formats.legacy.ExperimentDirectory
 import code.model._
+import code.view._
 
 /**
  */
 class Dmv {
+  import RequestHelper._
+
   val logger = Logger(classOf[Dmv])
 
   def numRows = 3
 
   private def measurementTable(measurement: GeneExpressionMeasurement): NodeSeq = {
     <div>
-    {ajaxLink}
     <table class="data_table">
     { htmlHeaders(measurement.conditions) }
     {for (i <- 0 until measurement.vngNames.length) yield
@@ -41,19 +43,7 @@ class Dmv {
     </div>
   }
 
-  private def sbeamsTable: NodeSeq = {
-    val projectId = S.param("projectId")
-    val timestamp = S.param("timestamp")
-    val conditions = S.param("conditions")
-    val condArg = if (conditions != Empty) {
-      val condstr = conditions.get
-      condstr.substring(1, condstr.length - 1).split(",").toList
-    } else Nil
-
-    if (projectId != Empty && timestamp != Empty) {
-      measurementTable(PebbleDatabase.sbeamsGeneExpressionsFor(projectId.get, timestamp.get, condArg))
-    } else <p>No project id or timestamp</p>
-  }
+  private def sbeamsTable: NodeSeq = measurementTable(measurement)
 
   private def ajaxLink: NodeSeq = SHtml.a(() => Alert("you clicked me !"), Text("Click me !"))
 
