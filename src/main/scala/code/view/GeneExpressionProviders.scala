@@ -85,15 +85,18 @@ object LegacyDataProvider extends GeneExpressionSerializer {
   import DatasourceHelper._
 
   def legacyConditions2JSON(baseName: String) = {
-    measurementConditions2JSON(LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName))
+    measurementConditions2JSON(LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
+                                                                       DatasourceHelper.OligoMap))
   }
   def legacyJSON(baseName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName)
+    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
+                                                              DatasourceHelper.OligoMap)
     geneExpressionMeasurement2Json(measurement)
   }
 
   def legacyJSON(baseName: String, conditionName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName)
+    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
+                                                              DatasourceHelper.OligoMap)
     geneExpressionMeasurement2Json(measurement, conditionName)
   }
 }

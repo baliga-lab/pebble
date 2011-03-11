@@ -33,7 +33,7 @@ class Dmv {
     { htmlHeaders(measurement.conditions) }
     {for (i <- 0 until measurement.vngNames.length) yield
       <tr>
-     <td>{measurement.vngNames(i)}</td>
+     <td>{measurement.vngNames(i)}<br/>{measurement.geneNames(i)}</td>
      {for (j <- 0 until measurement.conditions.length) yield
        <td>r: {measurement(i, j).ratio}<br/>&lambda;: {measurement(i, j).lambda}</td>
     }

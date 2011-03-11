@@ -15,6 +15,7 @@ trait GeneExpressionDatabase {
  * A class which can be used to combine measurements from various sources
  */
 class MutableGeneExpressionMeasurement(val vngNames: Array[String],
+                                       val geneNames: Array[String],
                                        val conditions: Array[String])
 extends GeneExpressionMeasurement {
   val data = Array.ofDim[GeneExpressionValue](vngNames.length, conditions.length)
@@ -42,7 +43,7 @@ object PebbleDatabase extends GeneExpressionDatabase {
     if (conditions == Nil) allExps
     else {
       val condArray = conditions.toArray
-      val result = new MutableGeneExpressionMeasurement(allExps.vngNames, condArray)
+      val result = new MutableGeneExpressionMeasurement(allExps.vngNames, allExps.geneNames, condArray)
 
       for (row <- 0 until allExps.vngNames.length) {
         for (col <- 0 until condArray.length) {
