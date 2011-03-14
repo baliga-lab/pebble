@@ -4,33 +4,52 @@
     <span class="lift:ContextPathJs.variable?name=pebbleContext"></span>
     <script id="highcharts" src="/js/highcharts.js"></script>
     <script type="text/javascript">
+      function getSelectedRows() {
+        return $('tr.selected');
+      }
+      function makeRowList(selectedRows) {
+        var rowList = '';
+        for (var i = 0; i < selectedRows.length; i++) {
+          if (i > 0) rowList += ',';
+          rowList += selectedRows.parent().children().index(selectedRows[i]);
+        }
+        return rowList;
+      }
+      function highChartsLineChart(id, baseurl) {
+        var selectedRows = getSelectedRows();
+        var rowList = makeRowList(selectedRows);
+        if (selectedRows.length > 0) {
+          var paramString = window.location.href.slice(window.location.href.indexOf('?') + 1)
+          $.get(pebbleContext + baseurl + '?rows=' + rowList + '&chartId=' + id + '&' + paramString,
+          function(data) {
+            var chart = new Highcharts.Chart(data);
+            $('#' + id).show();
+          });
+        }
+        return false;
+      }
+
+      function showLambdas() {
+        return highChartsLineChart('chart1', '/highcharts/lambdas');
+      }
+      function showRatios() {
+        return highChartsLineChart('chart2', '/highcharts/ratios');
+      }
+
       $(document).ready(function() {
         $('#chart1').hide();
-        $('.data_table tr').click(function() {
-          $(this).toggleClass('selected');
-        });
-        $('#show-graph').click(function() {
-          var selectedRows = $('tr.selected');
-          var rowParams = '';
-          for (var i = 0; i < selectedRows.length; i++) {
-            if (i > 0) rowParams += ',';
-            rowParams += selectedRows.parent().children().index(selectedRows[i]);
-          }
-          if (selectedRows.length > 0) {
-            var paramString = window.location.href.slice(window.location.href.indexOf('?') + 1)
-            $.get(pebbleContext + '/highcharts/sbeams?rows=' + rowParams + '&' + paramString,
-            function(data) {
-              var chart1 = new Highcharts.Chart(data);
-              $('#chart1').show();
-            });
-          }
-          return false;
-        });
+        $('#chart2').hide();
+
+        $('.data_table tr').click(function() { $(this).toggleClass('selected'); });
+        $('#show-lambdas').click(function() { return showLambdas(); });
+        $('#show-ratios').click(function() { return showRatios(); });
       });
     </script>
   </head_merge>
   <h2 class="alt">Data Matrix Viewer</h2>
-  <a id="show-graph" href="#">Plot Lambdas</a>
+  <a id="show-lambdas" href="#">Plot Lambdas</a>
+  <a id="show-ratios" href="#">Plot Ratios</a>
   <div id="chart1" style="width: 640px; height: 300px;"></div>
+  <div id="chart2" style="width: 640px; height: 300px;"></div>
   <span class="lift:Dmv.table"></span>
 </div>
