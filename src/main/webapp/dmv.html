@@ -1,6 +1,7 @@
 <div id="main" class="lift:surround?with=default;at=content">
   <head_merge>
     <title>Pebble - Data Matrix Viewer</title>
+    <span class="lift:ContextPathJs.variable?name=pebbleContext"></span>
     <script id="highcharts" src="/js/highcharts.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
@@ -17,7 +18,7 @@
           }
           if (selectedRows.length > 0) {
             var paramString = window.location.href.slice(window.location.href.indexOf('?') + 1)
-            $.get('/highcharts/sbeams?rows=' + rowParams + '&' + paramString,
+            $.get(pebbleContext + '/highcharts/sbeams?rows=' + rowParams + '&' + paramString,
             function(data) {
               var chart1 = new Highcharts.Chart(data);
               $('#chart1').show();
