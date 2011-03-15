@@ -65,4 +65,14 @@ class Dmv {
       <th>{conditionName}</th>
     }</tr>
   }
+
+  /**
+   * A snippet that returns the current query in a Javascript variable.
+   */
+  def thisQuery(in: NodeSeq): NodeSeq = {
+    val query = "var thisQuery = " + S.param("query").get + ";"
+    <script type="text/javascript">
+    {query}
+    </script>
+  }
 }

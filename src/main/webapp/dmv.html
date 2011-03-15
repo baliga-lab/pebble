@@ -2,38 +2,34 @@
   <head_merge>
     <title>Pebble - Data Matrix Viewer</title>
     <span class="lift:ContextPathJs.variable?name=pebbleContext"></span>
+    <span class="lift:Dmv.thisQuery"></span>
+    <script id="pebble" src="/js/pebble.js"></script>
     <script id="highcharts" src="/js/highcharts.js"></script>
     <script type="text/javascript">
-      function getSelectedRows() {
-        return $('tr.selected');
-      }
-      function makeRowList(selectedRows) {
-        var rowList = '';
+      function getSelectedRowIndexes() {
+        var selectedRows = $('tr.selected');
+        var result = [];
         for (var i = 0; i < selectedRows.length; i++) {
-          if (i > 0) rowList += ',';
-          rowList += selectedRows.parent().children().index(selectedRows[i]);
+            result.push(selectedRows.parent().children().index(selectedRows[i]));
         }
-        return rowList;
-      }
-      function highChartsLineChart(id, baseurl) {
-        var selectedRows = getSelectedRows();
-        var rowList = makeRowList(selectedRows);
-        if (selectedRows.length > 0) {
-          var paramString = window.location.href.slice(window.location.href.indexOf('?') + 1)
-          $.get(pebbleContext + baseurl + '?rows=' + rowList + '&chartId=' + id + '&' + paramString,
-          function(data) {
-            var chart = new Highcharts.Chart(data);
-            $('#' + id).show();
-          });
-        }
-        return false;
+        return result;
       }
 
       function showLambdas() {
-        return highChartsLineChart('chart1', '/highcharts/lambdas');
+        pebble.lambdaLineChart('chart1',
+          { data: thisQuery,
+            genes: getSelectedRowIndexes()
+          }
+        );
+        return false;
       }
       function showRatios() {
-        return highChartsLineChart('chart2', '/highcharts/ratios');
+        pebble.ratioLineChart('chart2',
+          { data: thisQuery,
+            genes: getSelectedRowIndexes()
+          }
+        );
+        return false;
       }
 
       $(document).ready(function() {
