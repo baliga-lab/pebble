@@ -27,7 +27,7 @@ if (!pebble) {
     function highChartsLineChart(id, dataurl) {
         $.get(dataurl,
               function(data) {
-                  new Highcharts.Chart(data);
+                  new Highcharts.Chart(JSON.parse(data));
                   $('#' + id).show();
               });
     }
