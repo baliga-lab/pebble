@@ -47,6 +47,7 @@ object HighchartsDataRestService extends RestHelper {
 
   def lambdaData2HighchartsJson: JValue = {
     val meas = measurement
+    S.setHeader("Access-Control-Allow-Origin", "*")
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Lambdas")) ~
@@ -57,6 +58,7 @@ object HighchartsDataRestService extends RestHelper {
 
   def ratioData2HighchartsJson: JValue = {
     val meas = measurement
+    S.setHeader("Access-Control-Allow-Origin", "*")
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Ratios")) ~

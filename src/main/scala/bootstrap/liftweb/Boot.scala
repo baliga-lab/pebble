@@ -56,9 +56,15 @@ class Boot {
   }
 */
   def addRestServices {
-    //LiftRules.dispatch.append(GeneExpressionRestService)
-    LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
-    LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
+    //LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
+    //LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
+
+    // from Lift mailing list:
+    // adding the services to the normal dispatch table
+    // this allows us to easily set headers like "Access-Control-Allow-Origin", so
+    // we can use it in AJAX. If we need stateless dispatch, we can use JsonResponse
+    LiftRules.dispatch.append(GeneExpressionRestService)
+    LiftRules.dispatch.append(HighchartsDataRestService)
   }
 
   def boot {

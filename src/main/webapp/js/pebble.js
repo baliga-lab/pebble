@@ -1,6 +1,6 @@
 /*
  * pebble.js - Javascript API for the Pebble service.
- * Assumes avaiability of
+ * Assumes availability of
  * - jQuery
  * - Highcharts API
  */
@@ -11,7 +11,7 @@ if (!pebble) {
 (function() {
     "use strict";
     // This web service's application context
-    var pebbleContext = 'http://druid:8080';
+    var pebbleContext = 'http://druid.systemsbiology.net:8080';
 
     function makeIntListString(intArray) {
         var result = '';
