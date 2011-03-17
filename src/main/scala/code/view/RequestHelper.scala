@@ -7,33 +7,24 @@ import net.liftweb.http._
 
 import code.model._
 
+/**
+ * A helper class that implements a lot of common functionality like
+ * query processing and view rendering.
+ */
 object RequestHelper {
-  def extractValueList(paramName: String): List[String] = {
-    val paramValue = S.param(paramName)
-    if (paramValue != Empty) {
-      val paramStr = paramValue.get
-      paramStr.substring(1, paramStr.length - 1).split(",").toList
-    } else Nil
-  }
 
-  def conditions = extractValueList("conditions")
+  /**
+   * Retrieves a SBEAMS measurement.
+   * It automatically reads the query parameter and extracts the measurement.
+   * @return a measurement
+   */
   def sbeamsMeasurement = {
     val query = S.param("query")
     if (query != Empty) {
       PebbleDatabase.geneExpressionsFor(query.get)
     } else {
-      val projectId = S.param("projectId")
-      val timestamp = S.param("timestamp")
-      PebbleDatabase.sbeamsGeneExpressionsFor(projectId.get, timestamp.get, conditions)
+      throw new IllegalArgumentException("no query provided")
     }
-  }
-
-  private def htmlHeaders(conditionNames: Array[String]): NodeSeq = {
-    <tr>
-      <th>Gene</th>
-    {for (conditionName <- conditionNames) yield
-      <th>{conditionName}</th>
-    }</tr>
   }
 
   def sbeamsMeasurementTable: Node = {
@@ -51,5 +42,13 @@ object RequestHelper {
     }
     </table>
     </div>
+  }
+
+  private def htmlHeaders(conditionNames: Array[String]): NodeSeq = {
+    <tr>
+      <th>Gene</th>
+    {for (conditionName <- conditionNames) yield
+      <th>{conditionName}</th>
+    }</tr>
   }
 }

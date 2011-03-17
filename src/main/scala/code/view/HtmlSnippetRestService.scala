@@ -15,10 +15,13 @@ import net.liftweb.json.JsonDSL._
 import org.systemsbiology.formats.common._
 import code.model._
 
+/**
+ * A web service to provide HTML snippets that view experiment data.
+ */
 object HtmlSnippetRestService extends RestHelper {
   val logger = Logger(getClass)
 
-  def makeDataTableSnippet = RequestHelper.sbeamsMeasurementTable
+  private def makeDataTableSnippet = RequestHelper.sbeamsMeasurementTable
 
   /**
    * Wrap a XHTML object in a LiftResponse object that sets the

@@ -37,8 +37,8 @@ object PebbleDatabase extends GeneExpressionDatabase {
     sbeamsGeneExpressionsFor(query0.params("projectId"), query0.params("timestamp"), query0.conditions)
   }
 
-  def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
-                               conditions: List[String]): GeneExpressionMeasurement = {
+  private def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
+                                       conditions: List[String]): GeneExpressionMeasurement = {
     val allExps = DatasourceHelper.sbeamsMeasurementFor(projectId, timestamp)
     if (conditions == Nil) allExps
     else {

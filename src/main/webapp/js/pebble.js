@@ -67,6 +67,6 @@ if (!pebble) {
         highChartsLineChart(id, makeDataUrlFromQuery('highcharts/ratios', id, query));
     };
     pebble.dmvTable = function(id, query) {
-        dmvTable(id, makeUrlFromQuery('/datatable', query));
+        dmvTable(id, makeUrlFromQuery('datatable', query));
     };
 }());
