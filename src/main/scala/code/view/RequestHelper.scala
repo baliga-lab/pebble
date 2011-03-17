@@ -1,5 +1,6 @@
 package code.view
 
+import scala.xml.{Node, NodeSeq}
 import scala.collection.JavaConversions
 import net.liftweb.common._
 import net.liftweb.http._
@@ -16,7 +17,7 @@ object RequestHelper {
   }
 
   def conditions = extractValueList("conditions")
-  def measurement = {
+  def sbeamsMeasurement = {
     val query = S.param("query")
     if (query != Empty) {
       PebbleDatabase.geneExpressionsFor(query.get)
@@ -27,4 +28,28 @@ object RequestHelper {
     }
   }
 
+  private def htmlHeaders(conditionNames: Array[String]): NodeSeq = {
+    <tr>
+      <th>Gene</th>
+    {for (conditionName <- conditionNames) yield
+      <th>{conditionName}</th>
+    }</tr>
+  }
+
+  def sbeamsMeasurementTable: Node = {
+    val measurement = sbeamsMeasurement
+    <div>
+    <table class="data_table">
+    { htmlHeaders(measurement.conditions) }
+    {for (i <- 0 until measurement.vngNames.length) yield
+      <tr>
+     <td>{measurement.vngNames(i)}<br/>{measurement.geneNames(i)}</td>
+     {for (j <- 0 until measurement.conditions.length) yield
+       <td>r: {measurement(i, j).ratio}<br/>&lambda;: {measurement(i, j).lambda}</td>
+    }
+     </tr>
+    }
+    </table>
+    </div>
+  }
 }

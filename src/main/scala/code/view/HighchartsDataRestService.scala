@@ -16,7 +16,6 @@ import org.systemsbiology.formats.common._
 import code.model._
 
 object HighchartsDataRestService extends RestHelper {
-  import RequestHelper._
 
   val logger = Logger(getClass)
 
@@ -50,7 +49,7 @@ object HighchartsDataRestService extends RestHelper {
   private def chartId = S.param("chartId").get
 
   def lambdaData2HighchartsJson: JValue = {
-    val meas = measurement
+    val measurement = RequestHelper.sbeamsMeasurement
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Lambdas")) ~
@@ -60,35 +59,13 @@ object HighchartsDataRestService extends RestHelper {
   }
 
   def ratioData2HighchartsJson: JValue = {
-    val meas = measurement
+    val measurement = RequestHelper.sbeamsMeasurement
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Ratios")) ~
     ("xAxis" -> ("title" -> "Conditions") ~ ("categories" -> xTitles(measurement))) ~
     ("yAxis" -> ("title" -> "Ratio")) ~
     ("series" -> selectedRatioSeries(measurement, rows))
-  }
-
-  def makeHtmlSnippet = {
-    <table id="snippy">
-      <tbody>
-        <tr><th>Header1</th><th>Header2</th></tr>
-        <tr><td>Value1</td><td>Value2</td></tr>
-      </tbody>
-    </table>
-  }
-
-  /**
-   * Wrap a XHTML object in a LiftResponse object that sets the
-   * "Access-Control-Allow-Origin" header to "*". RestHelper will
-   * implicitly box the response.
-   * @param node the XHTML node to wrap
-   * @return a LiftResponse
-   */
-  def crossDomainHtmlResponse(node: Node): LiftResponse = {
-    XhtmlResponse(node, Empty,
-                  List(("Access-Control-Allow-Origin", "*")),
-                  Nil, 200, false)
   }
 
   /**
@@ -105,6 +82,5 @@ object HighchartsDataRestService extends RestHelper {
   serve {
     case "highcharts" :: "lambdas" :: _ Get _ => crossDomainJsonResponse(lambdaData2HighchartsJson)
     case "highcharts" :: "ratios" :: _ Get _ => crossDomainJsonResponse(ratioData2HighchartsJson)
-    case "highcharts" :: "dummy" :: _ Get _ => crossDomainHtmlResponse(makeHtmlSnippet)
   }
 }

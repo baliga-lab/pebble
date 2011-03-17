@@ -3,6 +3,7 @@
  * Assumes availability of
  * - jQuery
  * - Highcharts API
+ * - JSON API
  */
 var pebble;
 if (!pebble) {
@@ -26,6 +27,7 @@ if (!pebble) {
     }
 
     function dmvTable(id, dataurl) {
+        console.debug('dmvTable, dataurl = ' + dataurl);
         $.ajax({
             url: dataurl,
             dataType: 'html',
@@ -53,6 +55,9 @@ if (!pebble) {
         return pebbleContext + '/' + serviceURI + '?rows=' + makeIntListString(query.genes) +
             '&chartId=' + chartId + '&query=' + JSON.stringify(query.data);
     }
+    function makeUrlFromQuery(serviceURI, query) {
+        return pebbleContext + '/' + serviceURI + '?query=' + JSON.stringify(query);
+    }
 
     // Public API
     pebble.lambdaLineChart = function(id, query) {
@@ -61,8 +66,7 @@ if (!pebble) {
     pebble.ratioLineChart = function(id, query) {
         highChartsLineChart(id, makeDataUrlFromQuery('highcharts/ratios', id, query));
     };
-
     pebble.dmvTable = function(id, query) {
-        dmvTable(id, pebbleContext + '/highcharts/dummy?bla=0');
+        dmvTable(id, makeUrlFromQuery('/datatable', query));
     };
 }());

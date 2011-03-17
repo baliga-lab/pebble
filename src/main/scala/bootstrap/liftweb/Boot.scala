@@ -53,6 +53,7 @@ class Boot {
     // "Access-Control-Allow-Origin" header
     LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
     LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
+    LiftRules.statelessDispatchTable.append(HtmlSnippetRestService)
 
     // from Lift mailing list:
     // adding the services to the normal dispatch table
