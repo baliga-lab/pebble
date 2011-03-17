@@ -9,8 +9,6 @@ import http._
 import sitemap._
 import mapper._
 
-//import net.liftweb.mongodb._
-
 import code.view._
 
 /**
@@ -25,13 +23,6 @@ class Boot {
                        Menu.i("About") / "about") // ::: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries:_*))
   }
-
-/*
-  def initMongoDb {
-    MongoDB.defineDb(DefaultMongoIdentifier,
-                     MongoAddress(MongoHost("localhost", 27017), "echidna"))
-    LiftRules.unloadHooks.append(MongoDB.close _)
-  }*/
 
   // it seems that this is the minimal amount of code that Lift needs for JNDI/JDBC
   // configuration without falling on its head
@@ -56,21 +47,24 @@ class Boot {
   }
 */
   def addRestServices {
-    //LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
-    //LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
+    // Pebble's services are stateless
+    // note that in order to achieve cross-domain AJAX calls and ensure
+    // Pebble's embeddability, our HTTP responses need to include the
+    // "Access-Control-Allow-Origin" header
+    LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
+    LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
 
     // from Lift mailing list:
     // adding the services to the normal dispatch table
     // this allows us to easily set headers like "Access-Control-Allow-Origin", so
     // we can use it in AJAX. If we need stateless dispatch, we can use JsonResponse
-    LiftRules.dispatch.append(GeneExpressionRestService)
-    LiftRules.dispatch.append(HighchartsDataRestService)
+    //LiftRules.dispatch.append(GeneExpressionRestService)
+    //LiftRules.dispatch.append(HighchartsDataRestService)
   }
 
   def boot {
     initJndi
     //initMapper
-    //initMongoDb
 
     // where to search snippet
     LiftRules.addToPackages("code")

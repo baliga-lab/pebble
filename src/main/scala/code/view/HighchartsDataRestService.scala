@@ -1,10 +1,14 @@
 package code.view
 
 import scala.collection.JavaConversions
+import scala.xml.Node
+
 import net.liftweb.common._
 import net.liftweb.http._
 
 import net.liftweb.http.rest.RestHelper
+import net.liftweb.http.js.JsExp
+
 import net.liftweb.json.JsonAST._
 import net.liftweb.json.JsonDSL._
 
@@ -47,7 +51,6 @@ object HighchartsDataRestService extends RestHelper {
 
   def lambdaData2HighchartsJson: JValue = {
     val meas = measurement
-    S.setHeader("Access-Control-Allow-Origin", "*")
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Lambdas")) ~
@@ -58,7 +61,6 @@ object HighchartsDataRestService extends RestHelper {
 
   def ratioData2HighchartsJson: JValue = {
     val meas = measurement
-    S.setHeader("Access-Control-Allow-Origin", "*")
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Ratios")) ~
@@ -67,9 +69,42 @@ object HighchartsDataRestService extends RestHelper {
     ("series" -> selectedRatioSeries(measurement, rows))
   }
 
+  def makeHtmlSnippet = {
+    <table id="snippy">
+      <tbody>
+        <tr><th>Header1</th><th>Header2</th></tr>
+        <tr><td>Value1</td><td>Value2</td></tr>
+      </tbody>
+    </table>
+  }
+
+  /**
+   * Wrap a XHTML object in a LiftResponse object that sets the
+   * "Access-Control-Allow-Origin" header to "*". RestHelper will
+   * implicitly box the response.
+   * @param node the XHTML node to wrap
+   * @return a LiftResponse
+   */
+  def crossDomainHtmlResponse(node: Node): LiftResponse = {
+    XhtmlResponse(node, Empty,
+                  List(("Access-Control-Allow-Origin", "*")),
+                  Nil, 200, false)
+  }
+
+  /**
+   * Wrap a JSON object in a LiftResponse object that sets the
+   * "Access-Control-Allow-Origin" header to "*". RestHelper will
+   * implicitly box the response.
+   * @param json the JSON object to wrap
+   * @return a LiftResponse
+   */
+  def crossDomainJsonResponse(json: JValue): LiftResponse = {
+    JsonResponse(json, List(("Access-Control-Allow-Origin", "*")), Nil, 200)
+  }
 
   serve {
-    case "highcharts" :: "lambdas" :: _ Get _ => lambdaData2HighchartsJson
-    case "highcharts" :: "ratios" :: _ Get _ => ratioData2HighchartsJson
+    case "highcharts" :: "lambdas" :: _ Get _ => crossDomainJsonResponse(lambdaData2HighchartsJson)
+    case "highcharts" :: "ratios" :: _ Get _ => crossDomainJsonResponse(ratioData2HighchartsJson)
+    case "highcharts" :: "dummy" :: _ Get _ => crossDomainHtmlResponse(makeHtmlSnippet)
   }
 }

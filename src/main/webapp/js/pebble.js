@@ -24,12 +24,29 @@ if (!pebble) {
         }
         return result;
     }
+
+    function dmvTable(id, dataurl) {
+        $.ajax({
+            url: dataurl,
+            dataType: 'html',
+            success: function (htmlText) {
+                $(htmlText).replaceAll('#' + id);
+            }
+        });
+    }
+
     function highChartsLineChart(id, dataurl) {
-        $.get(dataurl,
-              function(data) {
-                  new Highcharts.Chart(JSON.parse(data));
-                  $('#' + id).show();
-              });
+        $.ajax({
+            url: dataurl,
+            dataType: 'json',
+            success: function (jsonData) {
+                new Highcharts.Chart(jsonData);
+                $('#' + id).show();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.debug('error, jqXHR = ' + jqXHR + ' textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+            }
+        });
     }
 
     function makeDataUrlFromQuery(serviceURI, chartId, query) {
@@ -43,5 +60,9 @@ if (!pebble) {
     };
     pebble.ratioLineChart = function(id, query) {
         highChartsLineChart(id, makeDataUrlFromQuery('highcharts/ratios', id, query));
+    };
+
+    pebble.dmvTable = function(id, query) {
+        dmvTable(id, pebbleContext + '/highcharts/dummy?bla=0');
     };
 }());
