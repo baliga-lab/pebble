@@ -12,7 +12,11 @@ trait GeneExpressionDatabase {
 }
 
 /**
- * A class which can be used to combine measurements from various sources
+ * A class which can be used to combine measurements from various sources.
+ * @constructor creates a MutableGeneExpressionMeasurement instance
+ * @param vngNames the VNG names
+ * @param "real" gene names
+ * @param conditions the conditions
  */
 class MutableGeneExpressionMeasurement(val vngNames: Array[String],
                                        val geneNames: Array[String],

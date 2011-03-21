@@ -1,0 +1,4 @@
+# This file contains application configuration settings
+arrays.dir = /Volumes/Arrays
+#arrays.dir = /net/arrays
+
