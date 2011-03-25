@@ -47,7 +47,9 @@ object PebbleDatabase extends GeneExpressionDatabase {
     if (conditions == Nil) allExps
     else {
       val condArray = conditions.toArray
-      val result = new MutableGeneExpressionMeasurement(allExps.vngNames, allExps.geneNames, condArray)
+      val result = new MutableGeneExpressionMeasurement(allExps.vngNames,
+                                                        allExps.geneNames,
+                                                        condArray)
 
       for (row <- 0 until allExps.vngNames.length) {
         for (col <- 0 until condArray.length) {

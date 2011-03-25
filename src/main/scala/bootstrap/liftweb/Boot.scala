@@ -1,13 +1,11 @@
 package bootstrap.liftweb
 
-import net.liftweb._
-import util._
-import Helpers._
-
-import common._
-import http._
-import sitemap._
-import mapper._
+import net.liftweb.common._
+import net.liftweb.http._
+import net.liftweb.sitemap._
+import net.liftweb.mapper._
+import net.liftweb.util._
+import net.liftweb.util.Helpers._
 
 import code.view._
 
@@ -16,6 +14,31 @@ import code.view._
  * to modify lift's environment
  */
 class Boot {
+
+  def boot {
+    initJndi
+    //initMapper
+
+    // code search path for snippets and views
+    LiftRules.addToPackages("code")
+
+    buildSitemap
+    initAjaxSettings
+
+    LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
+
+    // What is the function to test if a user is logged in?
+    //LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+
+    LiftRules.htmlProperties.default.set((r: Req) =>
+      new Html5Properties(r.userAgent))
+
+    // Make a transaction span the whole HTTP request
+    S.addAround(DB.buildLoanWrapper)
+    
+    setErrorHandlers
+    addRestServices
+  }
 
   def buildSitemap {
     val entries = List(Menu.i("Home") / "index",
@@ -46,7 +69,22 @@ class Boot {
     Schemifier.schemify(true, Schemifier.infoF _, User)
   }
 */
-  def addRestServices {
+  private def setErrorHandlers {
+    LiftRules.uriNotFound.prepend(NamedPF("404handler") {
+      case (req, failure) =>
+        NotFoundAsTemplate(ParsePath(List("404"), "html", false, false))
+    })
+    // When the REST service is called with an invalid request, we return
+    // a 404 response instead of dumping the output to the user
+    LiftRules.exceptionHandler.prepend {
+      case (Props.RunModes.Production, Req(path, "", GetRequest), exception: Throwable) => {
+        Logger("Boot").error("Exception occurred", exception)
+        NotFoundResponse("Error while retrieving URI")
+      }
+    }
+  }
+
+  private def addRestServices {
     // Pebble's services are stateless
     // note that in order to achieve cross-domain AJAX calls and ensure
     // Pebble's embeddability, our HTTP responses need to include the
@@ -63,36 +101,10 @@ class Boot {
     //LiftRules.dispatch.append(HighchartsDataRestService)
   }
 
-  def boot {
-    initJndi
-    //initMapper
-
-    // where to search snippet
-    LiftRules.addToPackages("code")
-
-    buildSitemap
-
-    // Show the spinny image when an Ajax call starts
+  private def initAjaxSettings {
     LiftRules.ajaxStart =
-      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
-    
-    // Make the spinny image go away when it ends
+      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)    
     LiftRules.ajaxEnd =
-      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
-    
-    // Force the request to be UTF-8
-    LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
-
-    // What is the function to test if a user is logged in?
-    //LiftRules.loggedInTest = Full(() => User.loggedIn_?)
-
-    LiftRules.htmlProperties.default.set((r: Req) =>
-      new Html5Properties(r.userAgent))
-
-    // Make a transaction span the whole HTTP request
-    S.addAround(DB.buildLoanWrapper)
-
-    // other init
-    addRestServices
+      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)    
   }
 }
