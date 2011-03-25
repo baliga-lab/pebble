@@ -14,14 +14,14 @@ if (!pebble) {
     // This web service's application context
     var pebbleContext = 'http://druid.systemsbiology.net:8080';
 
-    function makeIntListString(intArray) {
+    function makeStringListString(stringArray) {
         var result = '';
         var i;
-        for (i = 0; i < intArray.length; i++) {
+        for (i = 0; i < stringArray.length; i++) {
             if (i > 0) {
                 result += ',';
             }
-            result += intArray[i];
+            result += "'" + stringArray[i] + "'";
         }
         return result;
     }
@@ -52,7 +52,7 @@ if (!pebble) {
     }
 
     function makeDataUrlFromQuery(serviceURI, chartId, query) {
-        return pebbleContext + '/' + serviceURI + '?rows=' + makeIntListString(query.genes) +
+        return pebbleContext + '/' + serviceURI + '?vngNames=' + makeStringListString(query.vngNames) +
             '&chartId=' + chartId + '&query=' + JSON.stringify(query.data);
     }
     function makeUrlFromQuery(serviceURI, query) {

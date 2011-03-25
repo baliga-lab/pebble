@@ -19,19 +19,21 @@ object HighchartsDataRestService extends RestHelper {
 
   val logger = Logger(getClass)
 
-  private def lambdaSeriesFor(measurement: GeneExpressionMeasurement, row: Int) = {
+  private def lambdaSeriesFor(measurement: GeneExpressionMeasurement, vngName: String) = {
     var data: List[Double] = Nil
+    val row = measurement.vngNames.indexOf(vngName)
     for (i <- 0 until measurement.conditions.length) {
       data ::= measurement(row, i).lambda
     }
     ("name" -> measurement.vngNames(row)) ~ ("data" -> data.reverse)
   }
 
-  private def selectedLambdaSeries(measurement: GeneExpressionMeasurement, rows: List[Int]) = {
-    rows.map(row => lambdaSeriesFor(measurement, row - 1))
+  private def selectedLambdaSeries(measurement: GeneExpressionMeasurement, vngNames: List[String]) = {
+    vngNames.map(vngName => lambdaSeriesFor(measurement, vngName))
   }
 
-  private def ratioSeriesFor(measurement: GeneExpressionMeasurement, row: Int) = {
+  private def ratioSeriesFor(measurement: GeneExpressionMeasurement, vngName: String) = {
+    val row = measurement.vngNames.indexOf(vngName)
     var data: List[Double] = Nil
     for (i <- 0 until measurement.conditions.length) {
       data ::= measurement(row, i).ratio
@@ -39,13 +41,13 @@ object HighchartsDataRestService extends RestHelper {
     ("name" -> measurement.vngNames(row)) ~ ("data" -> data.reverse)
   }
 
-  private def selectedRatioSeries(measurement: GeneExpressionMeasurement, rows: List[Int]) = {
-    rows.map(row => ratioSeriesFor(measurement, row - 1))
+  private def selectedRatioSeries(measurement: GeneExpressionMeasurement, vngNames: List[String]) = {
+    vngNames.map(vngName => ratioSeriesFor(measurement, vngName))
   }
 
   private def xTitles(measurement: GeneExpressionMeasurement): List[String] = measurement.conditions.toList
 
-  private def rows = S.param("rows").get.split(",").map(_.trim).map(str => java.lang.Integer.parseInt(str)).toList
+  private def vngNames = S.param("vngNames").get.split(",").map(_.trim).map(_.replaceAll("'", "")).toList
   private def chartId = S.param("chartId").get
 
   def lambdaData2HighchartsJson: JValue = {
@@ -55,7 +57,7 @@ object HighchartsDataRestService extends RestHelper {
     ("title" -> ("text" -> "Lambdas")) ~
     ("xAxis" -> ("title" -> "Conditions") ~ ("categories" -> xTitles(measurement))) ~
     ("yAxis" -> ("title" -> "Lambda")) ~
-    ("series" -> selectedLambdaSeries(measurement, rows))
+    ("series" -> selectedLambdaSeries(measurement, vngNames))
   }
 
   def ratioData2HighchartsJson: JValue = {
@@ -65,7 +67,7 @@ object HighchartsDataRestService extends RestHelper {
     ("title" -> ("text" -> "Ratios")) ~
     ("xAxis" -> ("title" -> "Conditions") ~ ("categories" -> xTitles(measurement))) ~
     ("yAxis" -> ("title" -> "Ratio")) ~
-    ("series" -> selectedRatioSeries(measurement, rows))
+    ("series" -> selectedRatioSeries(measurement, vngNames))
   }
 
   /**
