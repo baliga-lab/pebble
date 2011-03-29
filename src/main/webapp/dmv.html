@@ -6,19 +6,14 @@
     <script id="pebble" src="/js/pebble.js"></script>
     <script id="highcharts" src="/js/highcharts.js"></script>
     <script type="text/javascript">
-      function getSelectedRowIndexes() {
-        var selectedRows = $('tr.selected');
-        var result = [];
-        for (var i = 0; i < selectedRows.length; i++) {
-            result.push(selectedRows.parent().children().index(selectedRows[i]));
-        }
-        return result;
+      function getSelectedGenes() {
+        return $('tr.selected').map(function() { return this.id; }).get();
       }
 
       function showLambdas() {
         pebble.lambdaLineChart('chart1',
           { data: thisQuery,
-            genes: getSelectedRowIndexes()
+            vngNames: getSelectedGenes()
           }
         );
         return false;
@@ -26,7 +21,7 @@
       function showRatios() {
         pebble.ratioLineChart('chart2',
           { data: thisQuery,
-            genes: getSelectedRowIndexes()
+            vngNames: getSelectedGenes()
           }
         );
         return false;
@@ -47,5 +42,8 @@
   <a id="show-ratios" href="#">Plot Ratios</a>
   <div id="chart1" style="width: 640px; height: 300px;"></div>
   <div id="chart2" style="width: 640px; height: 300px;"></div>
+<!--
   <span class="lift:Dmv.table"></span>
+-->
+  <div class="lift:embed?what=dmv_table"></div>
 </div>

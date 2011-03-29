@@ -6,6 +6,7 @@ import scala.xml.{Node, NodeSeq, Text}
 
 import net.liftweb.common._
 import net.liftweb.util._
+import net.liftweb.util.Helpers._
 import net.liftweb.http._
 import net.liftweb.http.js.JsCmds.Alert
 
@@ -29,11 +30,12 @@ class Dmv {
 
   private def ajaxLink: NodeSeq = SHtml.a(() => Alert("you clicked me !"), Text("Click me !"))
 
+/*
   def table(in: NodeSeq): NodeSeq = {
     val datasource = S.param("datasource")
     logger.warn("Table for data source = " + datasource)
     RequestHelper.sbeamsMeasurementTable
-  }
+  }*/
 
   /**
    * A snippet that returns the current query in a Javascript variable.
@@ -43,5 +45,38 @@ class Dmv {
     <script type="text/javascript">
     {query}
     </script>
+  }
+
+  /**
+   * Render a DMV table using CSS transformers.
+   */
+  def table  = {
+    val measurement = RequestHelper.sbeamsMeasurement
+
+    def transformHead =
+      ".dmvheaditem *" #> ("Gene" :: measurement.conditions.toList).map(header => header)
+
+    def measurementColumns(row: Int) = {
+      var result: List[NodeSeq] = Nil
+      for (col <- 0 until measurement.conditions.length) {
+        val label = <span>r: {measurement(row, col).ratio}<br/>&lambda;: {measurement(row, col).lambda}</span>
+        result ::= label
+      }
+      result
+    }
+
+    def transformBody = {
+      def geneNames(row: Int) =
+        <span>{measurement.vngNames(row)}<br/>{measurement.geneNames(row)}</span>
+
+      var result: List[CssSel] = Nil
+      for (i <- 0 until measurement.vngNames.length) {
+        result ::= (".dmvrow [id+]" #> measurement.vngNames(i) &
+                    ".dmvgene *" #> geneNames(i) &
+                  ".dmvvalue *" #> measurementColumns(i))
+      }
+      ".dmvrow" #> result.reverse
+    }
+    transformHead & transformBody
   }
 }
