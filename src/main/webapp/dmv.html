@@ -26,22 +26,39 @@
         );
         return false;
       }
+      function sendDataUpdateEvent() {
+        var ev = document.createEvent("Events");
+        ev.initEvent("gaggleDataEvent", true, false);
+        document.dispatchEvent(ev);
+      }
 
       $(document).ready(function() {
-        $('#chart1').hide();
-        $('#chart2').hide();
-
-        $('.data_table tr').click(function() { $(this).toggleClass('selected'); });
+        $('.data_table tr').click(function() {
+          $(this).toggleClass('selected');
+          if ($(this).hasClass('selected')) {
+            $('#pebble-namelist').append('<li>' + this.id + '</li>');
+          } else {
+            $("li:contains('" + this.id + "')").remove();
+          }
+          sendDataUpdateEvent();
+        });
         $('#show-lambdas').click(function() { return showLambdas(); });
         $('#show-ratios').click(function() { return showRatios(); });
       });
     </script>
   </head_merge>
   <h2 class="alt">Data Matrix Viewer</h2>
+  <div id="selected_genes" class="gaggle-data" style="display:none;">
+    <span class="gaggle-name">Pebble Selection</span>
+    <div class="gaggle-namelist">
+      <ul id="pebble-namelist">
+      </ul>
+    </div>
+  </div>
   <a id="show-lambdas" href="#">Plot Lambdas</a>
   <a id="show-ratios" href="#">Plot Ratios</a>
-  <div id="chart1" style="width: 640px; height: 300px;"></div>
-  <div id="chart2" style="width: 640px; height: 300px;"></div>
+  <div id="chart1" style="width: 640px; height: 300px; display:none;"></div>
+  <div id="chart2" style="width: 640px; height: 300px; display:none;"></div>
 <!--
   <span class="lift:Dmv.table"></span>
 -->
