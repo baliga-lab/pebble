@@ -3,6 +3,7 @@
     <title>Pebble - Data Matrix Viewer</title>
     <span class="lift:ContextPathJs.variable?name=pebbleContext"></span>
     <span class="lift:Dmv.thisQuery"></span>
+    <script id="qtip" src="/js/jquery.qtip-1.0.0-rc3.min.js"></script>
     <script id="pebble" src="/js/pebble.js"></script>
     <script id="highcharts" src="/js/highcharts.js"></script>
     <script type="text/javascript">
@@ -44,6 +45,34 @@
         });
         $('#show-lambdas').click(function() { return showLambdas(); });
         $('#show-ratios').click(function() { return showRatios(); });
+
+        // tooltips go to echidna
+        $('th.condition').qtip({
+          content: {
+            text: 'qtip text',
+          },
+          api: {
+            onRender: function() {
+              var qtip = this;
+              var condition = $(this.elements['target']).attr('id');
+              var url = pebbleContext + '/echidna?condition=' + condition;
+              $.get(url, function(html) {
+                qtip.updateContent(html, false);
+                return true;
+              });
+            }
+          },
+          show: 'mouseover',
+          hide: 'mouseout',
+          position: {
+            corner: { target: 'bottomRight', tooltip: 'topLeft'}
+          },
+          style: {
+            width: 500,
+            tip: 'topLeft',
+            name: 'blue'
+          }
+        });
       });
     </script>
   </head_merge>

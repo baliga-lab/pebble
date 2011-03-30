@@ -43,6 +43,7 @@ class Boot {
   def buildSitemap {
     val entries = List(Menu.i("Home") / "index",
                        Menu.i("Dmv") / "dmv",
+                       Menu.i("Echidna") / "echidna",
                        Menu.i("About") / "about") // ::: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries:_*))
   }

@@ -53,8 +53,26 @@ class Dmv {
   def table  = {
     val measurement = RequestHelper.sbeamsMeasurement
 
-    def transformHead =
-      ".dmvheaditem *" #> ("Gene" :: measurement.conditions.toList).map(header => header)
+/*
+    def transformHead = {
+      val headers = "Gene" :: measurement.conditions.toList
+      ".dmvheaditem *" #> headers.map(header => header)
+    }
+    def addHeadIds = {
+      val headers = "Gene" :: measurement.conditions.toList
+      ".dmvheaditem * [id+]" #> headers.map(header => header)
+    }
+*/
+    def transformHead = {
+      var result: List[CssSel] = List(".dmvheaditem *" #> "Gene")
+      for (i <- 0 until measurement.conditions.length) {
+        val name = measurement.conditions(i)
+        result ::= (".dmvheaditem [id+]" #> name &
+                    ".dmvheaditem [class+]" #> "condition" &
+                    ".dmvheaditem *" #> name)
+      }
+      ".dmvheaditem" #> result.reverse
+    }
 
     def measurementColumns(row: Int) = {
       var result: List[NodeSeq] = Nil

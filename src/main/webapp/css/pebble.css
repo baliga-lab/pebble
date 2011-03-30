@@ -75,3 +75,11 @@ table.data_table tr.selected {
     background-color: #24249b;
     color: white;
 }
+
+.echidna-caption {
+    font-weight: bold;
+    font-size: 10pt;
+}
+.echidna-text {
+    font-size: 10pt;
+}
