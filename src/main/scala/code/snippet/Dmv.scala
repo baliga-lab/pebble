@@ -30,13 +30,6 @@ class Dmv {
 
   private def ajaxLink: NodeSeq = SHtml.a(() => Alert("you clicked me !"), Text("Click me !"))
 
-/*
-  def table(in: NodeSeq): NodeSeq = {
-    val datasource = S.param("datasource")
-    logger.warn("Table for data source = " + datasource)
-    RequestHelper.sbeamsMeasurementTable
-  }*/
-
   /**
    * A snippet that returns the current query in a Javascript variable.
    */
@@ -53,16 +46,6 @@ class Dmv {
   def table  = {
     val measurement = RequestHelper.sbeamsMeasurement
 
-/*
-    def transformHead = {
-      val headers = "Gene" :: measurement.conditions.toList
-      ".dmvheaditem *" #> headers.map(header => header)
-    }
-    def addHeadIds = {
-      val headers = "Gene" :: measurement.conditions.toList
-      ".dmvheaditem * [id+]" #> headers.map(header => header)
-    }
-*/
     def transformHead = {
       var result: List[CssSel] = List(".dmvheaditem *" #> "Gene")
       for (i <- 0 until measurement.conditions.length) {

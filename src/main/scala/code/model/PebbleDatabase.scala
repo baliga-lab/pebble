@@ -39,6 +39,7 @@ object PebbleDatabase extends GeneExpressionDatabase {
     val queries = parseJsonQuery(queryString)
     val query0 = queries(0)
     sbeamsGeneExpressionsFor(query0.params("projectId"), query0.params("timestamp"), query0.conditions)
+    // TODO: combine gene expressions to a result
   }
 
   private def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
@@ -64,7 +65,20 @@ object PebbleDatabase extends GeneExpressionDatabase {
    * Converts the specified JSON string into a Query object.
    */
   private def parseJsonQuery(queryString: String) = {
+    println("parseJsonQuery(), QUERY STRING: <<" + queryString + ">>")
     val jsonObj = JsonParser.parse(queryString)
-    jsonObj.children.map(q => q.extract[Query]).reverse
+    jsonObj.children.map(q => extractQueryElement(q)).reverse
+  }
+  private def extractQueryElement(queryElement: JValue) = {
+    println("QUERY ELEM: " + queryElement)
+    queryElement match {
+      case JObject(List(JField("uri", JString(uri)))) =>
+        val comps = uri.split("/")
+        val conditions = if (comps.length >= 5) List(comps(4)) else Nil
+        println("PROCESS URI QUERY, URI: " + uri + " comps =  [" + comps.toList + "]")
+        Query(comps(1), Map("projectId" -> comps(2), "timestamp" -> comps(3)), conditions)
+      case _ =>
+        queryElement.extract[Query]
+    }
   }
 }
