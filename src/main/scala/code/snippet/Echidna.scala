@@ -76,18 +76,20 @@ class Echidna {
 //    solrResponse.documents.foreach(println _)
     if (solrResponse.documents.length == 0) {
       <div>
+        <div>
+          <span class="echidna-caption">Condition: </span><span class="echidna-text">{condition}</span>
+        </div>
         <span class="echidna-text">No information available</span>
       </div>
     } else {
       val doc = solrResponse.documents(0)
-      val conditionName = doc.values.filter(_.name == "condition_name")(0)
       val groupNames    = doc.values.filter(_.name == "group_name")(0)
       val perturbations =
         doc.values.find(_.name == "perturbation").getOrElse(SolrCollection("lst", "perturbation", Nil))
       val properties    = doc.values.filter(_.name == "property_value")(0)
       <div>
         <div>
-          <span class="echidna-caption">Condition: </span><span class="echidna-text">{conditionName.asInstanceOf[SolrPrimitiveValue].value}</span>
+          <span class="echidna-caption">Condition: </span><span class="echidna-text">{condition}</span>
         </div>
         <div>
           <span class="echidna-caption">Groups: </span><span class="echidna-text">{collectionString(groupNames.asInstanceOf[SolrCollection])}</span>

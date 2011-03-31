@@ -40,6 +40,11 @@ class Dmv {
     </script>
   }
 
+  def shorten(str: String, maxlen: Int) = {
+    if (str.length <= maxlen) str
+    else (str.substring(0, maxlen - 4) + "...")
+  }
+
   /**
    * Render a DMV table using CSS transformers.
    */
@@ -52,7 +57,7 @@ class Dmv {
         val name = measurement.conditions(i)
         result ::= (".dmvheaditem [id+]" #> name &
                     ".dmvheaditem [class+]" #> "condition" &
-                    ".dmvheaditem *" #> name)
+                    ".dmvheaditem *" #> shorten(name, 20))
       }
       ".dmvheaditem" #> result.reverse
     }
