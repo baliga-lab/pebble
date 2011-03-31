@@ -3,6 +3,8 @@
     <title>Pebble - Data Matrix Viewer</title>
     <span class="lift:ContextPathJs.variable?name=pebbleContext"></span>
     <span class="lift:Dmv.thisQuery"></span>
+    <link href="/css/cupertino/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" media="screen"></link>
+    <script id="jqueryui" src="/js/jquery-ui-1.8.11.custom.min.js"></script>
     <script id="qtip" src="/js/jquery.qtip-1.0.0-rc3.min.js"></script>
     <script id="pebble" src="/js/pebble.js"></script>
     <script id="highcharts" src="/js/highcharts.js"></script>
@@ -12,19 +14,15 @@
       }
 
       function showLambdas() {
-        pebble.lambdaLineChart('chart1',
-          { data: thisQuery,
-            vngNames: getSelectedGenes()
-          }
-        );
+        if (getSelectedGenes().length > 0) {
+          $('#lambda-dialog').dialog('open');
+        }
         return false;
       }
       function showRatios() {
-        pebble.ratioLineChart('chart2',
-          { data: thisQuery,
-            vngNames: getSelectedGenes()
-          }
-        );
+        if (getSelectedGenes().length > 0) {
+          $('#ratio-dialog').dialog('open');
+        }
         return false;
       }
       function sendDataUpdateEvent() {
@@ -33,7 +31,28 @@
         document.dispatchEvent(ev);
       }
 
+      function makeDialog(dialogId, plotFunction) {
+        $('#' + dialogId).dialog({
+          width: 660,
+          autoOpen: false,
+          open: function(event, ui) { plotFunction(); } 
+          });
+      }
+
       $(document).ready(function() {
+        makeDialog('ratio-dialog',
+                   function() {
+                     pebble.ratioLineChart('ratio-chart',
+                     { data: thisQuery,
+                       vngNames: getSelectedGenes() });
+                   });
+        makeDialog('lambda-dialog',
+                   function() {
+                     pebble.lambdaLineChart('lambda-chart',
+                     { data: thisQuery,
+                       vngNames: getSelectedGenes() });
+                   });
+
         $('.data_table tr').click(function() {
           $(this).toggleClass('selected');
           if ($(this).hasClass('selected')) {
@@ -86,10 +105,15 @@
   </div>
   <a id="show-lambdas" href="#">Plot Lambdas</a>
   <a id="show-ratios" href="#">Plot Ratios</a>
+<!--  
   <div id="chart1" style="width: 640px; height: 300px; display:none;"></div>
   <div id="chart2" style="width: 640px; height: 300px; display:none;"></div>
-<!--
-  <span class="lift:Dmv.table"></span>
 -->
   <div class="lift:embed?what=dmv_table"></div>
+  <div id="lambda-dialog" title="Plot Lambdas">
+    <div id="lambda-chart" style="width: 640px; height: 300px;"></div>
+  </div>
+  <div id="ratio-dialog" title="Plot Ratios">
+    <div id="ratio-chart"></div>
+  </div>
 </div>
