@@ -74,7 +74,7 @@
             onRender: function() {
               var qtip = this;
               var condition = $(this.elements['target']).attr('id');
-              var url = pebbleContext + '/echidna?condition=' + condition;
+              var url = pebbleContext + '/echidna?condition=' + encodeURIComponent(condition);
               $.get(url, function(html) {
                 qtip.updateContent(html, false);
                 return true;
@@ -84,7 +84,7 @@
           show: 'mouseover',
           hide: 'mouseout',
           position: {
-            corner: { target: 'bottomRight', tooltip: 'topLeft'}
+            corner: { target: 'bottomLeft', tooltip: 'topLeft'}
           },
           style: {
             width: 500,
@@ -105,10 +105,6 @@
   </div>
   <a id="show-lambdas" href="#">Plot Lambdas</a>
   <a id="show-ratios" href="#">Plot Ratios</a>
-<!--  
-  <div id="chart1" style="width: 640px; height: 300px; display:none;"></div>
-  <div id="chart2" style="width: 640px; height: 300px; display:none;"></div>
--->
   <div class="lift:embed?what=dmv_table"></div>
   <div id="lambda-dialog" title="Plot Lambdas">
     <div id="lambda-chart" style="width: 640px; height: 300px;"></div>

@@ -67,8 +67,9 @@ class Echidna {
 
   def condition(html: NodeSeq): NodeSeq = {
     val condition = S.param("condition").openOr("CU_-5_vs_NRC-1.sig")
+    println("Echidna.condition(), param = <<" + condition + ">>")
     val xmlResponse =
-      XML.load(new URL(Props.get("solr.url").openOr("") + "/select?q=" + condition))
+      XML.load(new URL(Props.get("solr.url").openOr("") + "/select?q=" + urlEncode(condition)))
     val solrResponse = new SolrResponse(xmlResponse)
 //    println("SOLR HEADERS: " + solrResponse.responseHeader)
 //    println("SOLR DOCS: ")
@@ -81,7 +82,8 @@ class Echidna {
       val doc = solrResponse.documents(0)
       val conditionName = doc.values.filter(_.name == "condition_name")(0)
       val groupNames    = doc.values.filter(_.name == "group_name")(0)
-      val perturbations = doc.values.filter(_.name == "perturbation")(0)
+      val perturbations =
+        doc.values.find(_.name == "perturbation").getOrElse(SolrCollection("lst", "perturbation", Nil))
       val properties    = doc.values.filter(_.name == "property_value")(0)
       <div>
         <div>
