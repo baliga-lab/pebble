@@ -35,6 +35,8 @@ class Dmv {
    */
   def thisQuery(in: NodeSeq): NodeSeq = {
     val query = "var thisQuery = " + S.param("query").get + ";"
+    // TODO: Query is not URL safe, because condition names can have tons
+    // of unsafe characters - fix this !!!!
     <script type="text/javascript">
     {query}
     </script>

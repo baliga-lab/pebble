@@ -52,15 +52,13 @@
                      { data: thisQuery,
                        vngNames: getSelectedGenes() });
                    });
-
-        $('.data_table tr').click(function() {
+        $('.data_table').delegate('tr', 'click', function() {
           $(this).toggleClass('selected');
           if ($(this).hasClass('selected')) {
             $('#pebble-namelist').append('<li>' + this.id + '</li>');
           } else {
             $("li:contains('" + this.id + "')").remove();
           }
-          sendDataUpdateEvent();
         });
         $('#show-lambdas').click(function() { return showLambdas(); });
         $('#show-ratios').click(function() { return showRatios(); });
@@ -95,7 +93,7 @@
       });
     </script>
   </head_merge>
-  <h2 class="alt">Data Matrix Viewer</h2>
+  <h3 class="alt">Data Matrix Viewer</h3>
   <div id="selected_genes" class="gaggle-data" style="display:none;">
     <span class="gaggle-name">Pebble Selection</span>
     <div class="gaggle-namelist">
