@@ -12,24 +12,6 @@ trait GeneExpressionDatabase {
 }
 
 /**
- * A class which can be used to combine measurements from various sources.
- * @constructor creates a MutableGeneExpressionMeasurement instance
- * @param vngNames the VNG names
- * @param "real" gene names
- * @param conditions the conditions
- */
-class MutableGeneExpressionMeasurement(val vngNames: Array[String],
-                                       val geneNames: Array[String],
-                                       val conditions: Array[String])
-extends GeneExpressionMeasurement {
-  val data = Array.ofDim[GeneExpressionValue](vngNames.length, conditions.length)
-  def apply(geneIndex: Int, conditionIndex: Int) = data(geneIndex)(conditionIndex)
-  def update(geneIndex: Int, conditionIndex: Int, value: GeneExpressionValue) {
-    data(geneIndex)(conditionIndex) = value
-  }
-}
-
-/**
  * A facade where we pull out the data from the various sources.
  */
 object PebbleDatabase extends GeneExpressionDatabase {
@@ -37,9 +19,10 @@ object PebbleDatabase extends GeneExpressionDatabase {
 
   def geneExpressionsFor(queryString: String): GeneExpressionMeasurement = {
     val queries = parseJsonQuery(queryString)
-    val query0 = queries(0)
-    sbeamsGeneExpressionsFor(query0.params("projectId"), query0.params("timestamp"), query0.conditions)
-    // TODO: combine gene expressions to a result
+    GeneExpressionMeasurementMerger(
+      queries.map(query => sbeamsGeneExpressionsFor(query.params("projectId"),
+                                                    query.params("timestamp"),
+                                                    query.conditions))).mergedMeasurements
   }
 
   private def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
