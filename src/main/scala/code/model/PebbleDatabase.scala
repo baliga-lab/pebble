@@ -27,6 +27,8 @@ object PebbleDatabase extends GeneExpressionDatabase {
 
   private def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
                                        conditions: List[String]): GeneExpressionMeasurement = {
+    printf("sbeamsGeneExpressionsFor project: %s, timestamp: %s, cond: %s\n",
+         projectId, timestamp, conditions)
     val allExps = DatasourceHelper.sbeamsMeasurementFor(projectId, timestamp)
     if (conditions == Nil) allExps
     else {
@@ -47,7 +49,7 @@ object PebbleDatabase extends GeneExpressionDatabase {
   /**
    * Converts the specified JSON string into a Query object.
    */
-  private def parseJsonQuery(queryString: String) = {
+  def parseJsonQuery(queryString: String) = {
     println("parseJsonQuery(), QUERY STRING: <<" + queryString + ">>")
     val jsonObj = JsonParser.parse(queryString)
     jsonObj.children.map(q => extractQueryElement(q)).reverse

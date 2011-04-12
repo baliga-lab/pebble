@@ -9,7 +9,7 @@ import net.liftweb.util._
 import net.liftweb.util.Helpers._
 import net.liftweb.http._
 import net.liftweb.http.js.JsCmds.Alert
-
+import net.liftweb.json._
 
 import code.lib._
 import Helpers._
@@ -34,12 +34,27 @@ class Dmv {
    * A snippet that returns the current query in a Javascript variable.
    */
   def thisQuery(in: NodeSeq): NodeSeq = {
-    val query = "var thisQuery = " + S.param("query").get + ";"
-    // TODO: Query is not URL safe, because condition names can have tons
-    // of unsafe characters - fix this !!!!
+    import net.liftweb.json.JsonAST._
+    import net.liftweb.json.Printer._
+
+    println("PARAMETERS: " + S.request.get.params)
+    val jsonQuery = pretty(render(urlEncodeJsonParams(JsonParser.parse(S.param("query").openOr("")))))
+    printf("JSON QUERY: %s\n", jsonQuery)
+
+    val query = "var thisQuery = " + jsonQuery + ";"
     <script type="text/javascript">
     {query}
     </script>
+  }
+
+  private def urlEncodeJsonParams(jsonValue: JValue): JValue = {
+    jsonValue match {
+      case JArray(arr)         => JArray(arr.map(value => urlEncodeJsonParams(value)))
+      case JObject(obj)        => JObject(obj.map(field => urlEncodeJsonParams(field).asInstanceOf[JField]))
+      case JField(name, value) => JField(name, urlEncodeJsonParams(value))
+      case JString(s)          => JString(urlEncode(s))
+      case value               => value
+    }
   }
 
   def shorten(str: String, maxlen: Int) = {

@@ -12,8 +12,8 @@ if (!pebble) {
 (function() {
     "use strict";
     // This web service's application context
-    var pebbleContext = 'http://druid.systemsbiology.net:8080';
-    //var pebbleContext = 'http://edgar.systemsbiology.net:8081/pebble';
+    //var pebbleContext = 'http://druid.systemsbiology.net:8080';
+    var pebbleContext = 'http://edgar.systemsbiology.net:8081/pebble';
 
     function makeStringListString(stringArray) {
         var result = '';

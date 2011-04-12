@@ -10,45 +10,8 @@ import net.liftweb.http._
 import java.net.URL
 import scala.xml.{XML,Elem}
 
-trait SolrValue {
-  def valueType: String
-  def name: String
-}
+import org.systemsbiology.solr._
 
-case class SolrPrimitiveValue(valueType: String, name: String, value: String) extends SolrValue
-case class SolrCollection(valueType: String, name: String, values: List[SolrValue]) extends SolrValue
-
-class SolrResponse(solrResponseXml: Elem) {
-
-  /**
-   * Response header elements, currently this method does not recurse into nested lists/arrays (TODO).
-   */
-  def responseHeader: SolrCollection = {
-    parseCollection((solrResponseXml \ "lst")(0))
-  }
-
-  def documents: List[SolrCollection] = {
-    var result: List[SolrCollection] = Nil
-    for (doc <- (solrResponseXml \\ "doc")) {
-      result ::= parseCollection(doc)
-    }
-    result.reverse
-  }
-
-  private def parseCollection(xmlCollection: Node): SolrCollection = {
-    var result: List[SolrValue] = Nil
-    for (child <- xmlCollection.child) {
-      child.label match {
-        case "lst" => result ::= parseCollection(child)
-        case "arr" => result ::= parseCollection(child)
-        case _     =>
-          result ::= SolrPrimitiveValue(child.label, (child \ "@name").text, child.text)
-      }
-    }
-    SolrCollection(xmlCollection.label, (xmlCollection \ "@name").text, result.reverse)
-  }
-}
- 
 class Echidna {
 
   def collectionString(coll: SolrCollection): String = {
@@ -83,10 +46,10 @@ class Echidna {
       </div>
     } else {
       val doc = solrResponse.documents(0)
-      val groupNames    = doc.values.filter(_.name == "group_name")(0)
+      val groupNames    = doc.values.filter(_.name == Some("group_name"))(0)
       val perturbations =
-        doc.values.find(_.name == "perturbation").getOrElse(SolrCollection("lst", "perturbation", Nil))
-      val properties    = doc.values.filter(_.name == "property_value")(0)
+        doc.values.find(_.name == Some("perturbation")).getOrElse(SolrCollection("lst", Some("perturbation"), Nil))
+      val properties    = doc.values.filter(_.name == Some("property_value"))(0)
       <div>
         <div>
           <span class="echidna-caption">Condition: </span><span class="echidna-text">{condition}</span>
