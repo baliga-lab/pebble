@@ -44,6 +44,7 @@ class Boot {
     val entries = List(Menu.i("Home") / "index",
                        Menu.i("Dmv") / "dmv",
                        Menu.i("Echidna") / "echidna",
+                       Menu.i("Gene Functions") / "gene_functions",
                        Menu.i("About") / "about") // ::: User.sitemap
     LiftRules.setSiteMap(SiteMap(entries:_*))
   }

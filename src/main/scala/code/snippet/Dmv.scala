@@ -66,6 +66,7 @@ class Dmv {
    * Render a DMV table using CSS transformers.
    */
   def table  = {
+    println("FUNCTION IS: " + GeneFunctions.getFunctionFor("VNG2358G"))
     val measurement = RequestHelper.sbeamsMeasurement
 
     def transformHead = {

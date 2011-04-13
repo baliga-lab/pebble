@@ -39,31 +39,7 @@
           });
       }
 
-      $(document).ready(function() {
-        makeDialog('ratio-dialog',
-                   function() {
-                     pebble.ratioLineChart('ratio-chart',
-                     { data: thisQuery,
-                       vngNames: getSelectedGenes() });
-                   });
-        makeDialog('lambda-dialog',
-                   function() {
-                     pebble.lambdaLineChart('lambda-chart',
-                     { data: thisQuery,
-                       vngNames: getSelectedGenes() });
-                   });
-        $('.data_table').delegate('tr', 'click', function() {
-          $(this).toggleClass('selected');
-          if ($(this).hasClass('selected')) {
-            $('#pebble-namelist').append('<li>' + this.id + '</li>');
-          } else {
-            $("li:contains('" + this.id + "')").remove();
-          }
-        });
-        $('#show-lambdas').click(function() { return showLambdas(); });
-        $('#show-ratios').click(function() { return showRatios(); });
-
-        // tooltips go to echidna
+      function installEchidnaTooltip() {
         $('th.condition').qtip({
           content: {
             text: 'qtip text',
@@ -90,6 +66,62 @@
             name: 'blue'
           }
         });
+      }
+      function installGeneFunctionsTooltip() {
+        $('td.dmvgene').qtip({
+          content: {
+            text: 'qtip text',
+          },
+          api: {
+            onRender: function() {
+              var qtip = this;
+              var orfname = $(this.elements['target']).parent().attr('id');
+              var url = pebbleContext + '/gene_functions?orfname=' + orfname;
+              $.get(url, function(html) {
+                qtip.updateContent(html, false);
+                return true;
+              });
+            }
+          },
+          show: 'mouseover',
+          hide: 'mouseout',
+          position: {
+            corner: { target: 'topRight', tooltip: 'bottomLeft'}
+          },
+          style: {
+            width: 300,
+            tip: 'bottomLeft',
+            name: 'blue'
+          }
+        });
+      }
+
+      $(document).ready(function() {
+        makeDialog('ratio-dialog',
+                   function() {
+                     pebble.ratioLineChart('ratio-chart',
+                     { data: thisQuery,
+                       vngNames: getSelectedGenes() });
+                   });
+        makeDialog('lambda-dialog',
+                   function() {
+                     pebble.lambdaLineChart('lambda-chart',
+                     { data: thisQuery,
+                       vngNames: getSelectedGenes() });
+                   });
+        $('.data_table').delegate('tr', 'click', function() {
+          $(this).toggleClass('selected');
+          if ($(this).hasClass('selected')) {
+            $('#pebble-namelist').append('<li>' + this.id + '</li>');
+          } else {
+            $("li:contains('" + this.id + "')").remove();
+          }
+        });
+        $('#show-lambdas').click(function() { return showLambdas(); });
+        $('#show-ratios').click(function() { return showRatios(); });
+
+        installEchidnaTooltip();
+        installGeneFunctionsTooltip();
       });
     </script>
   </head_merge>

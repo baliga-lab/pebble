@@ -18,7 +18,6 @@ code {
 	border-bottom:1px solid #ccc;
 }
 	 
-
 .sidebar ul li {
 	margin:0;
 	padding:0;
@@ -81,5 +80,8 @@ table.data_table tr.selected {
     font-size: 10pt;
 }
 .echidna-text {
+    font-size: 10pt;
+}
+.qtip-content {
     font-size: 10pt;
 }
