@@ -9,7 +9,7 @@
   <inceptionYear>2011</inceptionYear>
   <properties>
     <scala.version>2.9.0-1</scala.version>
-    <lift.version>2.3</lift.version>
+    <lift.version>2.4-SNAPSHOT</lift.version>
     <junit.version>4.8.2</junit.version>
     <scalatest.version>1.4.1</scalatest.version>
     <jetty.version>6.1.26</jetty.version>
@@ -52,22 +52,22 @@
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-webkit_2.8.1</artifactId>
+      <artifactId>lift-webkit_2.9.0</artifactId>
       <version>${lift.version}</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-mapper_2.8.1</artifactId>
+      <artifactId>lift-mapper_2.9.0</artifactId>
       <version>${lift.version}</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-mongodb-record_2.8.1</artifactId>
+      <artifactId>lift-mongodb-record_2.9.0</artifactId>
       <version>${lift.version}</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-widgets_2.8.1</artifactId>
+      <artifactId>lift-widgets_2.9.0</artifactId>
       <version>${lift.version}</version>
     </dependency>
     <dependency>
