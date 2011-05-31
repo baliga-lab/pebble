@@ -8,10 +8,10 @@
   <name>pebble</name>
   <inceptionYear>2011</inceptionYear>
   <properties>
-    <scala.version>2.8.1</scala.version>
-    <lift.version>2.3-SNAPSHOT</lift.version>
+    <scala.version>2.9.0-1</scala.version>
+    <lift.version>2.3</lift.version>
     <junit.version>4.8.2</junit.version>
-    <specs.version>1.6.5</specs.version>
+    <scalatest.version>1.4.1</scalatest.version>
     <jetty.version>6.1.26</jetty.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -93,9 +93,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.scala-tools.testing</groupId>
-      <artifactId>specs_2.8.0</artifactId>
-      <version>${specs.version}</version>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_2.9.0</artifactId>
+      <version>${scalatest.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
