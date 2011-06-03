@@ -7,7 +7,7 @@ import net.liftweb.mapper._
 import net.liftweb.util._
 import net.liftweb.util.Helpers._
 
-import code.view._
+import org.systemsbiology.pebble.view._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -20,7 +20,7 @@ class Boot {
     initMapper
 
     // code search path for snippets and views
-    LiftRules.addToPackages("code")
+    LiftRules.addToPackages("org.systemsbiology.pebble")
 
     buildSitemap
     initAjaxSettings

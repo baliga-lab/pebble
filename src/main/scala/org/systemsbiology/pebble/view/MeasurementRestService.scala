@@ -1,4 +1,4 @@
-package code.view
+package org.systemsbiology.pebble.view
 
 import net.liftweb.http.rest.RestHelper
 

@@ -1,4 +1,4 @@
-package code.view
+package org.systemsbiology.pebble.view
 
 import scala.collection.JavaConversions
 import scala.xml.Node
@@ -13,7 +13,7 @@ import net.liftweb.json.JsonAST._
 import net.liftweb.json.JsonDSL._
 
 import org.systemsbiology.formats.common._
-import code.model._
+import org.systemsbiology.pebble.model._
 
 object HighchartsDataRestService extends RestHelper {
 

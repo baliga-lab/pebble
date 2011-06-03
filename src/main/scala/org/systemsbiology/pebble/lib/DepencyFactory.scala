@@ -1,5 +1,4 @@
-package code {
-package lib {
+package org.systemsbiology.pebble.lib
 
 import net.liftweb._
 import http._
@@ -53,5 +52,3 @@ sealed abstract class Changer {
   }
 }
 */
-}
-}

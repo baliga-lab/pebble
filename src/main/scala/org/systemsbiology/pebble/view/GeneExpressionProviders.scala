@@ -1,4 +1,4 @@
-package code.view
+package org.systemsbiology.pebble.view
 
 import java.io._
 import scala.collection.JavaConversions
@@ -10,7 +10,7 @@ import net.liftweb.util.Props
 import org.systemsbiology.formats.common._
 import org.systemsbiology.formats.sbeams._
 import org.systemsbiology.formats.legacy._
-import code.model._
+import org.systemsbiology.pebble.model._
 
 /**
  * This is a helper mixin containing serialization function for GeneExpressionMeasurent objects.
@@ -26,7 +26,7 @@ trait GeneExpressionSerializer {
   }
 
   def geneExpressionMeasurement2Json(measurement: GeneExpressionMeasurement,
-                                             condition: String) = {
+                                     condition: String) = {
     ("genes", measurement.vngNames.toSeq) ~ ("condition", condition) ~
       ("data", makeSeqFrom(measurement, condition))
   }
@@ -61,19 +61,18 @@ trait GeneExpressionSerializer {
 /**
  * JSON provider for SBEAMS gene expression data.
  */
-object SbeamsDataProvider extends GeneExpressionSerializer {
 
-  import DatasourceHelper._
+object SbeamsDataProvider extends GeneExpressionSerializer {
 
   // SBEAMS
   def sbeamsConditions2JSON(projectIdStr: String, timestamp: String) = {
-    measurementConditions2JSON(sbeamsMeasurementFor(projectIdStr, timestamp))
+    measurementConditions2JSON(SBEAMSDatabase.measurementFor(projectIdStr, timestamp))
   }
   def sbeamsJSON(projectIdStr: String, timestamp: String) = {
-    geneExpressionMeasurement2Json(sbeamsMeasurementFor(projectIdStr, timestamp))
+    geneExpressionMeasurement2Json(SBEAMSDatabase.measurementFor(projectIdStr, timestamp))
   }
   def sbeamsJSON(projectIdStr: String, timestamp: String, conditionName: String) = {
-    geneExpressionMeasurement2Json(sbeamsMeasurementFor(projectIdStr, timestamp), conditionName)
+    geneExpressionMeasurement2Json(SBEAMSDatabase.measurementFor(projectIdStr, timestamp), conditionName)
   }
 }
 
@@ -82,21 +81,19 @@ object SbeamsDataProvider extends GeneExpressionSerializer {
  */
 object LegacyDataProvider extends GeneExpressionSerializer {
 
-  import DatasourceHelper._
-
   def legacyConditions2JSON(baseName: String) = {
-    measurementConditions2JSON(LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
-                                                                       DatasourceHelper.OligoMap))
+    measurementConditions2JSON(LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
+                                                                       PebbleDatabase.OligoMap))
   }
   def legacyJSON(baseName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
-                                                              DatasourceHelper.OligoMap)
+    val measurement = LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
+                                                              PebbleDatabase.OligoMap)
     geneExpressionMeasurement2Json(measurement)
   }
 
   def legacyJSON(baseName: String, conditionName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(LegacyDirectory, baseName,
-                                                              DatasourceHelper.OligoMap)
+    val measurement = LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
+                                                              PebbleDatabase.OligoMap)
     geneExpressionMeasurement2Json(measurement, conditionName)
   }
 }

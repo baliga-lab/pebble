@@ -1,11 +1,11 @@
-package code.view
+package org.systemsbiology.pebble.view
 
 import scala.xml.{Node, NodeSeq}
 import scala.collection.JavaConversions
 import net.liftweb.common._
 import net.liftweb.http._
 
-import code.model._
+import org.systemsbiology.pebble.model._
 
 /**
  * A helper class that implements a lot of common functionality like

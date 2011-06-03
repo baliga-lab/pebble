@@ -1,4 +1,4 @@
-package code.snippet
+package org.systemsbiology.pebble.snippet
 
 import java.util.Date
 
@@ -11,16 +11,15 @@ import net.liftweb.http._
 import net.liftweb.http.js.JsCmds.Alert
 import net.liftweb.json._
 
-import code.lib._
 import Helpers._
 
 import org.systemsbiology.formats.common._
 import org.systemsbiology.formats.legacy.ExperimentDirectory
-import code.model._
-import code.view._
 
-/**
- */
+import org.systemsbiology.pebble.lib._
+import org.systemsbiology.pebble.model._
+import org.systemsbiology.pebble.view._
+
 class Dmv {
 
   val logger = Logger(classOf[Dmv])

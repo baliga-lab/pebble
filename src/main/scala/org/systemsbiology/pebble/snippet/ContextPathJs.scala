@@ -1,4 +1,4 @@
-package code.snippet
+package org.systemsbiology.pebble.snippet
 
 import scala.xml.NodeSeq
 
