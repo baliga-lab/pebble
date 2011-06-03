@@ -82,18 +82,13 @@ object SbeamsDataProvider extends GeneExpressionSerializer {
 object LegacyDataProvider extends GeneExpressionSerializer {
 
   def legacyConditions2JSON(baseName: String) = {
-    measurementConditions2JSON(LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
-                                                                       PebbleDatabase.OligoMap))
+    measurementConditions2JSON(PreSBEAMSDatabase.measurementFor(baseName))
   }
   def legacyJSON(baseName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
-                                                              PebbleDatabase.OligoMap)
-    geneExpressionMeasurement2Json(measurement)
+    geneExpressionMeasurement2Json(PreSBEAMSDatabase.measurementFor(baseName))
   }
 
   def legacyJSON(baseName: String, conditionName: String) = {
-    val measurement = LegacyMeasurementReader.readMeasurement(PebbleDatabase.LegacyDirectory, baseName,
-                                                              PebbleDatabase.OligoMap)
-    geneExpressionMeasurement2Json(measurement, conditionName)
+    geneExpressionMeasurement2Json(PreSBEAMSDatabase.measurementFor(baseName), conditionName)
   }
 }

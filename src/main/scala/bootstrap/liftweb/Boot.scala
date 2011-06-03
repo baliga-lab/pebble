@@ -8,6 +8,8 @@ import net.liftweb.util._
 import net.liftweb.util.Helpers._
 
 import org.systemsbiology.pebble.view._
+import org.systemsbiology.pebble.model.echidna.EchidnaConnectionIdentifier
+import org.systemsbiology.pebble.model.gwap.GWAPConnectionIdentifier
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -56,14 +58,22 @@ class Boot {
     println("INIT JNDI: Database is " + Props.get("db.url"))
 
     if (!DB.jndiJdbcConnAvailable_?) {
-      val vendor = 
+      val echidnaDB = 
 	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-			                       Props.get("db.url") openOr 
+			                       Props.get("echidna.db.url") openOr 
 			                       "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
-			                       Props.get("db.user"), Props.get("db.password"))
+			                       Props.get("echidna.db.user"), Props.get("echidna.db.password"))
+      val gwapDB = 
+	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+			                       Props.get("gwap.db.url") openOr 
+			                       "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
+			                       Props.get("gwap.db.user"), Props.get("gwap.db.password"))
 
-      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
-      DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
+      LiftRules.unloadHooks.append(echidnaDB.closeAllConnections_! _)
+      LiftRules.unloadHooks.append(gwapDB.closeAllConnections_! _)
+      DB.defineConnectionManager(DefaultConnectionIdentifier, echidnaDB)
+      DB.defineConnectionManager(EchidnaConnectionIdentifier, echidnaDB)
+      DB.defineConnectionManager(GWAPConnectionIdentifier, gwapDB)
     }
   }
 
