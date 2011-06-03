@@ -27,23 +27,49 @@ object PebbleDatabase extends GeneExpressionDatabase {
 
   private def sbeamsGeneExpressionsFor(projectId: String, timestamp: String,
                                        conditions: List[String]): GeneExpressionMeasurement = {
-    printf("sbeamsGeneExpressionsFor project: %s, timestamp: %s, cond: %s\n",
+    try {
+      sbeamsGeneExpressionsFileSystem(projectId, timestamp, conditions)
+    } catch {
+      case _:ArrayIndexOutOfBoundsException =>
+        println("NOT FOUND (because of Echidna 1.0/GWAP inconsistency)")
+        sbeamsGeneExpressionsDatabase(projectId, timestamp, conditions)
+      case ex =>
+        ex.printStackTrace
+        null
+    }
+  }
+
+  private def sbeamsGeneExpressionsFileSystem(projectId: String, timestamp: String,
+                                              conditions: List[String]): GeneExpressionMeasurement = {
+    printf("sbeamsGeneExpressions (file system) project: %s, timestamp: %s, cond: %s\n",
          projectId, timestamp, conditions)
-    val allExps = DatasourceHelper.sbeamsMeasurementFor(projectId, timestamp)
-    if (conditions == Nil) allExps
+    filterMeasurementByConditions(DatasourceHelper.sbeamsMeasurementFor(projectId, timestamp),
+                                  conditions)
+  }
+
+  private def filterMeasurementByConditions(measurement: GeneExpressionMeasurement,
+                                            conditions: List[String]) = {
+    if (conditions == Nil) measurement
     else {
       val condArray = conditions.toArray
-      val result = new MutableGeneExpressionMeasurement(allExps.vngNames,
-                                                        allExps.geneNames,
+      val result = new MutableGeneExpressionMeasurement(measurement.vngNames,
+                                                        measurement.geneNames,
                                                         condArray)
 
-      for (row <- 0 until allExps.vngNames.length) {
+      for (row <- 0 until measurement.vngNames.length) {
         for (col <- 0 until condArray.length) {
-          result(row, col) = allExps(row, allExps.conditions.indexOf(condArray(col)))
+          result(row, col) = measurement(row, measurement.conditions.indexOf(condArray(col)))
         }
       }
       result
     }
+  }
+
+  private def sbeamsGeneExpressionsDatabase(projectId: String, timestamp: String,
+                                            conditions: List[String]): GeneExpressionMeasurement = {
+    printf("sbeamsGeneExpressions (fallback db) project: %s, timestamp: %s, cond: %s\n",
+           projectId, timestamp, conditions)
+    DatasourceHelper.sbeamsMeasurementDbFor(projectId, timestamp, conditions)
   }
 
   /**

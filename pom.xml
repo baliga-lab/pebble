@@ -109,6 +109,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.6.1</version>
     </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.16</version>
+    </dependency>
   </dependencies>
   
   <build>
@@ -128,6 +133,9 @@
         </executions>
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
+          <args>
+            <arg>-deprecation</arg>
+          </args>
         </configuration>
       </plugin>
       <plugin>

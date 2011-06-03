@@ -66,7 +66,15 @@ class Dmv {
    * Render a DMV table using CSS transformers.
    */
   def table  = {
-    println("FUNCTION IS: " + GeneFunctions.getFunctionFor("VNG2358G"))
+    // DEBUGGIN'
+/*
+    val allConditions = Condition.findAll
+    println("# CONDITIONS FOUND: " + allConditions.length)
+    println("# FEATURES(0) FOUND: " + allConditions(0).features.length)
+    val gene = allConditions(0).features(0).gene.obj.get
+    printf("one gene: %s, alias: %s, gene_name: %s\n", gene.name, gene.alias, gene.geneName)
+*/
+    // DEBUGGIN'
     val measurement = RequestHelper.sbeamsMeasurement
 
     def transformHead = {

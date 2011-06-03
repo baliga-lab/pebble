@@ -17,7 +17,7 @@ class Boot {
 
   def boot {
     initJndi
-    //initMapper
+    initMapper
 
     // code search path for snippets and views
     LiftRules.addToPackages("code")
@@ -52,6 +52,9 @@ class Boot {
   // it seems that this is the minimal amount of code that Lift needs for JNDI/JDBC
   // configuration without falling on its head
   def initJndi {
+    //DefaultConnectionIdentifier.jndiName = "jdbc/echidna"
+    println("INIT JNDI: Database is " + Props.get("db.url"))
+
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -63,14 +66,11 @@ class Boot {
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
   }
-/*
+
   def initMapper {
-    // Use Lift's Mapper ORM to populate the database
-    // you don't need to use Mapper to use Lift... use
-    // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _, User)
+    //Schemifier.schemify(true, Schemifier.infoF _, User)
   }
-*/
+
   private def setErrorHandlers {
     LiftRules.uriNotFound.prepend(NamedPF("404handler") {
       case (req, failure) =>

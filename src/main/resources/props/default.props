@@ -2,3 +2,7 @@
 arrays.dir = /Volumes/Arrays
 #arrays.dir = /net/arrays
 solr.url = http://edgar.systemsbiology.net:8081/solr
+db.class=com.mysql.jdbc.Driver
+db.url=jdbc:mysql://localhost/echidna_production
+db.user=egrin
+db.password=egrin
