@@ -34,9 +34,9 @@ class Echidna {
     val xmlResponse =
       XML.load(new URL(Props.get("solr.url").openOr("") + "/select?q=" + urlEncode(condition)))
     val solrResponse = new SolrResponse(xmlResponse)
-    println("SOLR HEADERS: " + solrResponse.responseHeader)
-    println("SOLR DOCS: ")
-    solrResponse.documents.foreach(println _)
+    //println("SOLR HEADERS: " + solrResponse.responseHeader)
+    //println("SOLR DOCS: ")
+    //solrResponse.documents.foreach(println _)
     if (solrResponse.documents.length == 0) {
       <div>
         <div>

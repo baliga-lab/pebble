@@ -1,5 +1,0 @@
-# This file contains application configuration settings
-#arrays.dir = /Volumes/Arrays
-arrays.dir = /net/arrays
-solr.url = http://edgar.systemsbiology.net:8081/solr
-
