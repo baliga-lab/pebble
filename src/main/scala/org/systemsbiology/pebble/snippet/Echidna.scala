@@ -34,9 +34,9 @@ class Echidna {
     val xmlResponse =
       XML.load(new URL(Props.get("solr.url").openOr("") + "/select?q=" + urlEncode(condition)))
     val solrResponse = new SolrResponse(xmlResponse)
-//    println("SOLR HEADERS: " + solrResponse.responseHeader)
-//    println("SOLR DOCS: ")
-//    solrResponse.documents.foreach(println _)
+    println("SOLR HEADERS: " + solrResponse.responseHeader)
+    println("SOLR DOCS: ")
+    solrResponse.documents.foreach(println _)
     if (solrResponse.documents.length == 0) {
       <div>
         <div>
@@ -46,7 +46,7 @@ class Echidna {
       </div>
     } else {
       val doc = solrResponse.documents(0)
-      val groupNames    = doc.values.filter(_.name == Some("group_name"))(0)
+      val groupNames    = extractGroupNames(doc)
       val perturbations =
         doc.values.find(_.name == Some("perturbation")).getOrElse(SolrCollection("lst", Some("perturbation"), Nil))
       val properties    = doc.values.filter(_.name == Some("property_value"))(0)
@@ -65,5 +65,10 @@ class Echidna {
         </div>
       </div>
     }
+  }
+
+  private def extractGroupNames(doc: SolrCollection) = {
+    val results = doc.values.filter(_.name == Some("group_name"))
+    if (results.length == 0) SolrCollection("arr", Some("group_name"), Nil) else results(0)
   }
 }
