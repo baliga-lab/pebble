@@ -51,7 +51,7 @@ object HighchartsDataRestService extends RestHelper {
   private def chartId = S.param("chartId").get
 
   def lambdaData2HighchartsJson: JValue = {
-    val measurement = RequestHelper.sbeamsMeasurement
+    val measurement = RequestHelper.measurementFromRequest
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Lambdas")) ~
@@ -61,7 +61,7 @@ object HighchartsDataRestService extends RestHelper {
   }
 
   def ratioData2HighchartsJson: JValue = {
-    val measurement = RequestHelper.sbeamsMeasurement
+    val measurement = RequestHelper.measurementFromRequest
 
     ("chart" -> (("renderTo" -> chartId) ~ ("defaultSeriesType" -> "line"))) ~
     ("title" -> ("text" -> "Ratios")) ~

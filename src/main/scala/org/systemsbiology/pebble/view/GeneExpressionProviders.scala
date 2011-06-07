@@ -20,12 +20,12 @@ trait GeneExpressionSerializer {
     JObject(List(JField("conditions", JArray(measurements.conditions.map(cond => JString(cond)).toList))))
   }
 
-  def geneExpressionMeasurement2Json(measurement: GeneExpressionMeasurement) = {
+  def geneExpressionMeasurement2JSON(measurement: GeneExpressionMeasurement) = {
     ("genes", measurement.vngNames.toSeq) ~ ("conditions", measurement.conditions.toSeq) ~
       ("data", makeSeqFrom(measurement))
   }
 
-  def geneExpressionMeasurement2Json(measurement: GeneExpressionMeasurement,
+  def geneExpressionMeasurement2JSON(measurement: GeneExpressionMeasurement,
                                      condition: String) = {
     ("genes", measurement.vngNames.toSeq) ~ ("condition", condition) ~
       ("data", makeSeqFrom(measurement, condition))
@@ -69,10 +69,10 @@ object SbeamsDataProvider extends GeneExpressionSerializer {
     measurementConditions2JSON(SBEAMSDatabase.measurementFor(projectIdStr, timestamp))
   }
   def sbeamsJSON(projectIdStr: String, timestamp: String) = {
-    geneExpressionMeasurement2Json(SBEAMSDatabase.measurementFor(projectIdStr, timestamp))
+    geneExpressionMeasurement2JSON(SBEAMSDatabase.measurementFor(projectIdStr, timestamp))
   }
   def sbeamsJSON(projectIdStr: String, timestamp: String, conditionName: String) = {
-    geneExpressionMeasurement2Json(SBEAMSDatabase.measurementFor(projectIdStr, timestamp), conditionName)
+    geneExpressionMeasurement2JSON(SBEAMSDatabase.measurementFor(projectIdStr, timestamp), conditionName)
   }
 }
 
@@ -85,10 +85,10 @@ object LegacyDataProvider extends GeneExpressionSerializer {
     measurementConditions2JSON(PreSBEAMSDatabase.measurementFor(baseName))
   }
   def legacyJSON(baseName: String) = {
-    geneExpressionMeasurement2Json(PreSBEAMSDatabase.measurementFor(baseName))
+    geneExpressionMeasurement2JSON(PreSBEAMSDatabase.measurementFor(baseName))
   }
 
   def legacyJSON(baseName: String, conditionName: String) = {
-    geneExpressionMeasurement2Json(PreSBEAMSDatabase.measurementFor(baseName), conditionName)
+    geneExpressionMeasurement2JSON(PreSBEAMSDatabase.measurementFor(baseName), conditionName)
   }
 }

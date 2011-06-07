@@ -14,11 +14,10 @@ import org.systemsbiology.pebble.model._
 object RequestHelper {
 
   /**
-   * Retrieves a SBEAMS measurement.
-   * It automatically reads the query parameter and extracts the measurement.
+   * Retrieves a GeneExpressionMeasurement for the current HTTP request.
    * @return a measurement
    */
-  def sbeamsMeasurement = {
+  def measurementFromRequest = {
     val query = S.param("query")
     if (query != Empty) {
       PebbleDatabase.geneExpressionsFor(query.get)
@@ -28,7 +27,7 @@ object RequestHelper {
   }
 
   def sbeamsMeasurementTable: Node = {
-    val measurement = sbeamsMeasurement
+    val measurement = measurementFromRequest
     <div>
     <table class="data_table">
     { htmlHeaders(measurement.conditions) }

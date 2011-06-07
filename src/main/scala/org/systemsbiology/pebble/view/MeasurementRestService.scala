@@ -6,7 +6,7 @@ import net.liftweb.http.rest.RestHelper
  * A very simple JSON REST service written for Lift.
  * We set up the routes here that provide information about experiment data
  */
-object GeneExpressionRestService extends RestHelper {
+object GeneExpressionRestService extends RestHelper with GeneExpressionSerializer {
   import LegacyDataProvider._
   import SbeamsDataProvider._
 
@@ -31,5 +31,10 @@ object GeneExpressionRestService extends RestHelper {
       _ Get _ => sbeamsConditions2JSON(projectId, timestamp)
     case "api" :: "1" :: "pre-sbeams" :: baseName :: "conditions" ::
       _ Get _ => legacyConditions2JSON(baseName)
+  }
+
+  serve {
+    case "api" :: "1" :: "conditions" :: _ Get _ => measurementConditions2JSON(RequestHelper.measurementFromRequest)
+    case "api" :: "1" :: "measurements" :: _ Get _   => geneExpressionMeasurement2JSON(RequestHelper.measurementFromRequest)
   }
 }

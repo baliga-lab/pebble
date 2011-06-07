@@ -74,7 +74,7 @@ class Dmv {
     printf("one gene: %s, alias: %s, gene_name: %s\n", gene.name, gene.alias, gene.geneName)
 */
     // DEBUGGIN'
-    val measurement = RequestHelper.sbeamsMeasurement
+    val measurement = RequestHelper.measurementFromRequest
 
     def transformHead = {
       var result: List[CssSel] = List(".dmvheaditem *" #> "Gene")
