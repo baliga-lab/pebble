@@ -35,11 +35,10 @@ trait GeneExpressionSerializer {
   private def makeSeqFrom(measurement: GeneExpressionMeasurement) = {
     var result: List[JArray] = Nil
     for (rowIndex <- 0 until measurement.vngNames.length) {
-      var row: List[JField] = Nil
+      var row: List[JObject] = Nil
       for (conditionIndex <- 0 until measurement.conditions.length) {
         val value = measurement(rowIndex, conditionIndex)
-        row ::= JField("value",
-                       JObject(List(JField("ratio", value.ratio), JField("lambda", value.lambda))))
+        row ::= JObject(List(JField("ratio", value.ratio), JField("lambda", value.lambda)))
       }
       result ::= JArray(row.reverse)
     }
@@ -47,12 +46,11 @@ trait GeneExpressionSerializer {
   }
 
   private def makeSeqFrom(measurement: GeneExpressionMeasurement, condition: String) = {
-    var result: List[JField] = Nil
+    var result: List[JObject] = Nil
     val conditionIndex = measurement.conditions.indexOf(condition)
     for (rowIndex <- 0 until measurement.vngNames.length) {
       val value = measurement(rowIndex, conditionIndex)
-      result ::= JField("value",
-                        JObject(List(JField("ratio", value.ratio), JField("lambda", value.lambda))))
+      result ::= JObject(List(JField("ratio", value.ratio), JField("lambda", value.lambda)))
     }
     JArray(result.reverse)
   }
