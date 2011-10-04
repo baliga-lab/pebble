@@ -101,6 +101,7 @@ class Boot {
     // note that in order to achieve cross-domain AJAX calls and ensure
     // Pebble's embeddability, our HTTP responses need to include the
     // "Access-Control-Allow-Origin" header
+    println("ADDING REST SERVICES")
     LiftRules.statelessDispatchTable.append(GeneExpressionRestService)
     LiftRules.statelessDispatchTable.append(HighchartsDataRestService)
     LiftRules.statelessDispatchTable.append(HtmlSnippetRestService)
